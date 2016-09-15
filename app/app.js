@@ -10,7 +10,7 @@ exports.handler = function(event, context) {
 
   request.get(url, function (error, response, body) {
     if (!error && response.statusCode == 200) {
-        data = "data:" + response.headers["content-type"] + ";base64," + new Buffer(body).toString('base64');
+        var data = "data:" + response.headers["content-type"] + ";base64," + new Buffer(body).toString('base64');
         console.log(data);
     }
   });
