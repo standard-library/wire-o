@@ -6,7 +6,6 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "fs": "0.0.1-security",
     "pdf-merge": "0.0.4",
     "request": "^2.74.0"
   }

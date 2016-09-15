@@ -1,4 +1,11 @@
-var pm = require('pdf-merge')
+'use strict';
+
+var exec = require('child_process').exec;
+
+process.env['PATH'] = process.env['PATH'] + ':' + process.env['LAMBDA_TASK_ROOT'] + '/bin';
+process.env['LD_LIBRARY_PATH'] = process.env['LAMBDA_TASK_ROOT'] + '/bin';
+
+var pm = require('pdf-merge');
 var request = require('request');
 
 exports.handler = function(event, context) {
@@ -14,4 +21,7 @@ exports.handler = function(event, context) {
         console.log(data);
     }
   });
+
+  exec('pdftk --version', context.done);
+
 }
