@@ -1,8 +1,10 @@
 # zip any pdfs in the pdf folder
-rm ./pdf/pdf.zip
-zip -r ./pdf/pdf.zip ./pdf/
+rm ./pdf/pdfs.tar.gz
 
-# convert zip into base64 string
-pdf_zip=$( base64 ./pdf/pdf.zip)
+# compress pdfs into a gzipped tarball
+tar cvzf ./pdf/pdfs.tar.gz ./pdf/*.pdf
 
-curl -X POST -d "{\"data\":\"$pdf_zip\"}" https://o64722rmyh.execute-api.us-east-1.amazonaws.com/beta
+# convert tar.gz into base64 string
+tar_gzipped_pdfs=$( base64 ./pdf/pdfs.tar.gz)
+#
+curl -X POST -d "{\"data\":\"$tar_gzipped_pdfs\"}" https://o64722rmyh.execute-api.us-east-1.amazonaws.com/beta
