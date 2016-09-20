@@ -13,7 +13,7 @@ You can use the AWS Console, but the AWS CLI allows for the scripting of Lambda 
 - put in the Access & Secrety Access keys
 
 ### zip
-run `./zip_it.sh` (script only zips things, doesn't upload, right now)
+run `./zip_and_send_lambda.sh` (zips Lambda files and updates function)
 
 ### send pdf as byte64 string to API Gateway
 run `./send_pdf.sh`

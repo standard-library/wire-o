@@ -1,4 +1,4 @@
-// 'use strict';
+'use strict';
 
 const exec = require('child_process').exec;
 
@@ -11,17 +11,17 @@ const async = require('async');
 const zlib = require('zlib');
 
 exports.handler = function(event, context) {
-  const base64Data = event.data;
-  console.log(base64Data);
+  let base64Data = event.data;
+  console.log(typeof base64Data);
 
-  const buffer = Buffer.from(base64Data, 'base64');
-  zlib.unzip(buffer, (err, buffer) => {
-    if (!err) {
-      console.log(buffer.toString());
-    } else {
-    // handle error
-    }
-  });
+  // const buffer = Buffer.from(base64Data, 'base64');
+  // zlib.unzip(buffer, (err, buffer) => {
+  //   if (!err) {
+  //     console.log(buffer.toString());
+  //   } else {
+  //   // handle error
+  //   }
+  // });
 
 
 }
