@@ -9,19 +9,18 @@ const pm = require('pdf-merge');
 const request = require('request');
 const async = require('async');
 const zlib = require('zlib');
+const tar = require('tar');
 
 exports.handler = function(event, context) {
-  let base64Data = event.data;
-  console.log(typeof base64Data);
-
-  // const buffer = Buffer.from(base64Data, 'base64');
-  // zlib.unzip(buffer, (err, buffer) => {
-  //   if (!err) {
-  //     console.log(buffer.toString());
-  //   } else {
-  //   // handle error
-  //   }
-  // });
+  const base64Data = event.data;
+  let buff = new Buffer(base64Data, 'base64')
+  zlib.unzip(buff, (err, buffer) => {
+    if (!err) {
+      console.log(buffer.toString());
+    } else {
+    // handle error
+    }
+  });
 
 
 }

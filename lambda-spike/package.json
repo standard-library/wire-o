@@ -8,6 +8,7 @@
   "dependencies": {
     "async": "^2.0.1",
     "pdf-merge": "0.0.4",
-    "request": "^2.74.0"
+    "request": "^2.74.0",
+    "tar": "^2.2.1"
   }
 }
