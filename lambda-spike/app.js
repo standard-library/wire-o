@@ -10,5 +10,8 @@ const request = require('request');
 const async = require('async');
 
 exports.handler = function(event, context) {
-  console.log(event);
+  const data = event.data;
+  console.log(data);
+
+
 }

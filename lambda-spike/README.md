@@ -8,17 +8,12 @@ You can use the AWS Console, but the AWS CLI allows for the scripting of Lambda 
 
 ### configure AWS on your machine
 (after the AWS CLI is installed)
-- `aws configure`
 - get the Access Key & Secret Access Key from me :-)
-- in your `.aws/config` file, add the following:
-```
-[profile stdlib]
-role_arn = arn:aws:iam::397120925662:role/service-role/stdlib-role
-source_profile = default
-```
+- `aws configure` in bash
+- put in the Access & Secrety Access keys
 
 ### zip
 run `./zip_it.sh` (script only zips things, doesn't upload, right now)
 
 ### send pdf as byte64 string to API Gateway
-run `./send_pdf.sh` 
+run `./send_pdf.sh`
