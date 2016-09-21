@@ -13,9 +13,6 @@ var fs = require('fs');
 var AWS = require('aws-sdk');
 var s3 = new AWS.S3();
 var uuid = require('node-uuid');
-// var targz = require('tar.gz');
-// var tar = require('tar');
-// var unzip = require('unzip');
 
 exports.handler = function(event, context) {
 
@@ -36,7 +33,7 @@ exports.handler = function(event, context) {
       console.log('File did not process.');
     } else {
       console.log('All files processed');
-      mergeTmpFiles();
+      findTmpFiles();
     }
   });
 
@@ -48,17 +45,36 @@ exports.handler = function(event, context) {
     });
   }
 
-  function mergeTmpFiles() {
-    // var pdftkPath = './bin/pdftk'
-    // var pdftkPath = 'C:\\PDFtk\\bin\\pdftk.exe';
-    // var pdfFiles = [/bin/ + '/pdf1.pdf', __dirname + '/pdf2.pdf'];
-    // var pdfMerge = new PDFMerge(pdfFiles, pdftkPath);
-    //
-    // pdfMerge
-    //   .asBuffer()
-    //   .merge(function(error, buffer) {
-    //     fs.writeFileSync(__dirname + '/merged.pdf', buffer);
-    //   });
+  function findTmpFiles() {
+    fs.readdir('/tmp/', function (err, files) {
+      if (err) {
+        console.log('Error reading file from bin directory');
+      } else {
+        mergeFiles(files);
+      }
+    });
+  }
 
+  function mergeFiles(files) {
+    for (var i in files) {
+      files[i] = '/tmp/' + files[i];
+    }
+    var pdfFiles = files;
+
+    var pdftkPath = './bin/pdftk';
+    var pdfMerge = new PDFMerge(pdfFiles, pdftkPath);
+
+    pdfMerge
+      .asBuffer()
+      .merge(function(error, buffer) {
+        var params = { Bucket: 'superglue', Key: uuid.v4() + ".pdf", Body: buffer };
+        s3.putObject(params, function (err, s3Data) {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log('success?');
+          }
+        });
+    });
   }
 }
