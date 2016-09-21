@@ -5,7 +5,7 @@ var exec = require('child_process').exec;
 process.env['PATH'] = process.env['PATH'] + ':' + process.env['LAMBDA_TASK_ROOT'] + '/bin';
 process.env['LD_LIBRARY_PATH'] = process.env['LAMBDA_TASK_ROOT'] + '/bin';
 
-var pdfMerge = require('pdf-merge');
+var PDFMerge = require('pdf-merge');
 var request = require('request');
 var async = require('async');
 var zlib = require('zlib');
@@ -19,37 +19,46 @@ var uuid = require('node-uuid');
 
 exports.handler = function(event, context) {
 
-  var base64Data = event.data;
-
-  async.each(base64Data, function (pdfData, callback) {
-    var buff = new Buffer(pdfData, 'base64');
-    zlib.unzip(buff, function (err, buffed) {
+  var base64Pdfs = event.data;
+  async.each(base64Pdfs, function (base64Pdf, callback) {
+    var pdfBuffer = new Buffer(base64Pdf, 'base64');
+    zlib.unzip(pdfBuffer, function (err, buffer) {
       if (!err) {
-        var params = { Bucket: 'superglue', Key: uuid.v4() + ".pdf", Body: buffed };
-        s3.putObject(params, function (err, s3Data) {
-          if (err) {
-            console.log(err);
-          } else {
-            console.log('s3 data: ' + s3Data)
-            console.log('Successfully uploaded.');
-          }
-        });
+        writeToTmp(buffer);
+        console.log('File unzipped');
+        callback();
       } else {
-        console.log('error');
+        callback('Error unzipping file.');
       }
     });
+  }, function(err) {
+    if (err) {
+      console.log('File did not process.');
+    } else {
+      console.log('All files processed');
+      mergeTmpFiles();
+    }
   });
 
-  var PDFMerge = require('pdf-merge');
-  var pdftkPath = './bin/pdftk'
-  // var pdftkPath = 'C:\\PDFtk\\bin\\pdftk.exe';
-  // var pdfFiles = [__dirname + '/pdf1.pdf', __dirname + '/pdf2.pdf'];
-  // var pdfMerge = new PDFMerge(pdfFiles, pdftkPath);
+  function writeToTmp(buffer, callback) {
+    var filePath = '/tmp/' + uuid.v4() + '.pdf'
+    fs.writeFile(filePath, buffer, function (err) {
+      if (err) return console.log(err);
+      console.log('worked!?');
+    });
+  }
 
-  // pdfMerge
-  //   .asBuffer()
-  //   .merge(function(error, buffer) {
-  //fs.writeFileSync(__dirname + '/merged.pdf', buffer);
-});
+  function mergeTmpFiles() {
+    // var pdftkPath = './bin/pdftk'
+    // var pdftkPath = 'C:\\PDFtk\\bin\\pdftk.exe';
+    // var pdfFiles = [/bin/ + '/pdf1.pdf', __dirname + '/pdf2.pdf'];
+    // var pdfMerge = new PDFMerge(pdfFiles, pdftkPath);
+    //
+    // pdfMerge
+    //   .asBuffer()
+    //   .merge(function(error, buffer) {
+    //     fs.writeFileSync(__dirname + '/merged.pdf', buffer);
+    //   });
 
+  }
 }
