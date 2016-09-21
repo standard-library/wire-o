@@ -1,31 +1,31 @@
 'use strict';
 
-const exec = require('child_process').exec;
+var exec = require('child_process').exec;
 
 process.env['PATH'] = process.env['PATH'] + ':' + process.env['LAMBDA_TASK_ROOT'] + '/bin';
 process.env['LD_LIBRARY_PATH'] = process.env['LAMBDA_TASK_ROOT'] + '/bin';
 
-const pdfMerge = require('pdf-merge');
-const request = require('request');
-const async = require('async');
-const zlib = require('zlib');
-const fs = require('fs');
-const AWS = require('aws-sdk');
-const s3 = new AWS.S3();
-const uuid = require('node-uuid');
-// const targz = require('tar.gz');
-// const tar = require('tar');
-// const unzip = require('unzip');
+var pdfMerge = require('pdf-merge');
+var request = require('request');
+var async = require('async');
+var zlib = require('zlib');
+var fs = require('fs');
+var AWS = require('aws-sdk');
+var s3 = new AWS.S3();
+var uuid = require('node-uuid');
+// var targz = require('tar.gz');
+// var tar = require('tar');
+// var unzip = require('unzip');
 
 exports.handler = function(event, context) {
 
-  const base64Data = event.data;
+  var base64Data = event.data;
 
   async.each(base64Data, function (pdfData, callback) {
-    let buff = new Buffer(pdfData, 'base64');
+    var buff = new Buffer(pdfData, 'base64');
     zlib.unzip(buff, function (err, buffed) {
       if (!err) {
-        const params = { Bucket: 'superglue', Key: uuid.v4() + ".pdf", Body: buffed };
+        var params = { Bucket: 'superglue', Key: uuid.v4() + ".pdf", Body: buffed };
         s3.putObject(params, function (err, s3Data) {
           if (err) {
             console.log(err);
