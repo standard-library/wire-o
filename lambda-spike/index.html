@@ -47,8 +47,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script>
 
-      var sendToAws = function(dataArr) {
-        var json = { data: dataArr }
+
+      var sendToAws = function(pdfArr) {
+        var json = { pdfUrls: pdfArr }
         $.ajax({
           headers: { "Accept": "application/json"},
           type: "POST",
@@ -60,46 +61,34 @@
           dataType: "json",
           contentType: 'application/json',
           data: JSON.stringify(json),
-          success: function(data){
-            console.log(data);
+          success: function(response){
+            var base64String = btoa([].reduce.call(new Uint8Array(response.data),function(p,c){return p+String.fromCharCode(c)},''))
+            window.open("data:application/pdf;base64," + base64String);
+
           }
         });
       }
 
-      var addPdf = function(path) {
-        var pdf = new XMLHttpRequest();
-        pdf.open("GET", path, false);
-        pdf.onreadystatechange = function () {
-            var pdfResponse = pdf.responseText;
-            var pdfBase64 = btoa(unescape(encodeURIComponent(pdfResponse)));
-            pdfBase64Arr.push(pdfBase64);
-        }
-        pdf.send(null);
-      }
-
       // not secure
-      var pdfBase64Arr = [];
-
       var checkerFinder = function() {
+        var pdfUrlArray = []
 
         if ($(".pcah").is(":checked")) {
-          var pcahPath = "https://s3.amazonaws.com/superglue/PCAH_PDF_TEMPLATE.pdf";
-          addPdf(pcahPath);
+          var pcahUrl = "https://s3.amazonaws.com/superglue/PCAH_PDF_TEMPLATE.pdf";
+          pdfUrlArray.push(pcahUrl);
         };
 
         if ($(".hello").is(":checked")) {
-          var helloPath = "https://s3.amazonaws.com/superglue/hello.pdf";
-          addPdf(helloPath);
+          var helloUrl = "https://s3.amazonaws.com/superglue/hello.pdf";
+          pdfUrlArray.push(helloUrl);
         };
 
         if ($(".ambience").is(":checked")) {
-          var ambiencePath = "https://s3.amazonaws.com/superglue/ambience.pdf";
-          addPdf(ambiencePath);
+          var ambienceUrl = "https://s3.amazonaws.com/superglue/ambience.pdf";
+          addPdf(ambienceUrl);
         };
 
-        console.log(pdfBase64Arr);
-        sendToAws(pdfBase64Arr);
-
+        sendToAws(pdfUrlArray);
       }
 
 
