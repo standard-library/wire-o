@@ -6,28 +6,34 @@ process.env['PATH'] = process.env['PATH'] + ':' + process.env['LAMBDA_TASK_ROOT'
 process.env['LD_LIBRARY_PATH'] = process.env['LAMBDA_TASK_ROOT'] + '/bin';
 
 var PDFMerge = require('pdf-merge');
-var request = require('request');
+// var request = require('request');
 var async = require('async');
 var zlib = require('zlib');
 var fs = require('fs');
-var AWS = require('aws-sdk');
-var s3 = new AWS.S3();
+// var AWS = require('aws-sdk');
+// var s3 = new AWS.S3();
 var uuid = require('node-uuid');
 
 exports.handler = function(event, context) {
-
   var base64Pdfs = event.data;
   async.each(base64Pdfs, function (base64Pdf, callback) {
     var pdfBuffer = new Buffer(base64Pdf, 'base64');
-    zlib.unzip(pdfBuffer, function (err, buffer) {
-      if (!err) {
-        writeToTmp(buffer);
-        console.log('File unzipped');
-        callback();
-      } else {
-        callback('Error unzipping file.');
-      }
-    });
+    if (pdfBuffer) {
+      writeToTmp(pdfBuffer);
+      console.log('Received file');
+      callback();
+    } else {
+      callback('Error getting file');
+    }
+    // zlib.unzip(pdfBuffer, function (err, buffer) {
+    //   if (!err) {
+    //     writeToTmp(buffer);
+    //     console.log('File unzipped');
+    //     callback();
+    //   } else {
+    //     callback('Error unzipping file.');
+    //   }
+    // });
   }, function(err) {
     if (err) {
       console.log('File did not process.');
@@ -67,14 +73,8 @@ exports.handler = function(event, context) {
     pdfMerge
       .asBuffer()
       .merge(function(error, buffer) {
-        var params = { Bucket: 'superglue', Key: uuid.v4() + ".pdf", Body: buffer };
-        s3.putObject(params, function (err, s3Data) {
-          if (err) {
-            console.log(err);
-          } else {
-            console.log('success?');
-          }
-        });
+        var base64Merge = new Buffer(buffer).toString('base64');
+        context.succeed(base64Merge);
     });
   }
 }

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SUPERGLUE (AWS Lambda Spike example)</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+      body {
+        margin-left: 1%;
+      }
+
+      body, h1, h2 {
+        margin-top: 0;
+        font-weight: lighter;
+      }
+
+      .name {
+        font-size: 2em;
+        text-decoration: underline;
+      }
+
+      .togetherness {
+        font-style: italic;
+      }
+
+      .pdf-options {
+        margin-left: 2%;
+      }
+
+      form {
+        font-weight: normal;
+        font-style: italic;
+        font-size: 1.3em;
+      }
+
+      ul {
+        list-style: none;
+      }
+
+      button {
+        display: block;
+      }
+
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script>
+
+      var sendToAws = function(dataArr) {
+        var json = { data: dataArr }
+        $.ajax({
+          url: "https://o64722rmyh.execute-api.us-east-1.amazonaws.com/beta",
+          // headers: { 'Access-Control-Allow-Origin': '*' },
+          type: "POST",
+          crossDomain: true,
+          dataType: "json",
+          contentType: "application/json",
+          // dataType: "application/json",
+          data: JSON.stringify(json),
+          success: function(data){
+            console.log(data);
+          },
+          xhrFields: {
+            withCredentials: true
+          }
+
+          // beforeSend: setHeader
+        });
+      }
+
+      var addPdf = function(path) {
+        var pdf = new XMLHttpRequest();
+        pdf.open("GET", path, false);
+        pdf.onreadystatechange = function () {
+          // if (pdf.status === 200 || pdf.status == 0) {
+            var pdfResponse = pdf.responseText;
+            var pdfBase64 = btoa(unescape(encodeURIComponent(pdfResponse)));
+            // var pdfBase64 = 'data:application/pdf;base64,' + btoa(unescape(encodeURIComponent(pdfResponse)));
+            pdfBase64Arr.push(pdfBase64);
+        }
+        pdf.send(null);
+      }
+
+      // not secure
+      var pdfBase64Arr = [];
+
+      var checkerFinder = function() {
+
+        if ($(".pcah").is(":checked")) {
+          var pcahPath = "https://s3.amazonaws.com/superglue/PCAH_PDF_TEMPLATE.pdf";
+          addPdf(pcahPath);
+        };
+
+        if ($(".hello").is(":checked")) {
+          var helloPath = "https://s3.amazonaws.com/superglue/hello.pdf";
+          addPdf(helloPath);
+        };
+
+        if ($(".ambience").is(":checked")) {
+          var ambiencePath = "https://s3.amazonaws.com/superglue/ambience.pdf";
+          addPdf(ambiencePath);
+        };
+
+        console.log(pdfBase64Arr);
+        sendToAws(pdfBase64Arr);
+
+      }
+
+
+      var buttonPressed = function() {
+        $(".superglue-that-button").click(function(event){
+          event.preventDefault();
+          checkerFinder();
+        });
+      }
+
+      $(function() {
+        buttonPressed();
+      });
+
+    </script>
+  </head>
+
+  <body>
+    <h1><span class="name">SUPERGLUE</span> <small>Let's glue a limited set of PDFs <span class="togetherness">together</span>.</small></h1>
+    <div class="pdf-options">
+      <h2>What do you want to glue today?</h2>
+
+      <form>
+        <ul>
+          <li><input type="checkbox" class="pcah">the famous PCAH template pdf</input></li>
+          <li><input type="checkbox" class="hello">the radical 'hello' pdf</input></li>
+          <li><input type="checkbox" class="ambience">the renowned 'ambience' pdf</input></li>
+        </ul>
+        <button class="superglue-that-button">SUPERGLUE TO THE RESCUE!</button>
+      </form>
+
+    </div>
+  </body>
+</html>
