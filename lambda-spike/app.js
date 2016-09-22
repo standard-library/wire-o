@@ -25,15 +25,6 @@ exports.handler = function(event, context) {
     } else {
       callback('Error getting file');
     }
-    // zlib.unzip(pdfBuffer, function (err, buffer) {
-    //   if (!err) {
-    //     writeToTmp(buffer);
-    //     console.log('File unzipped');
-    //     callback();
-    //   } else {
-    //     callback('Error unzipping file.');
-    //   }
-    // });
   }, function(err) {
     if (err) {
       console.log('File did not process.');

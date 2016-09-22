@@ -50,22 +50,19 @@
       var sendToAws = function(dataArr) {
         var json = { data: dataArr }
         $.ajax({
-          url: "https://o64722rmyh.execute-api.us-east-1.amazonaws.com/beta",
-          // headers: { 'Access-Control-Allow-Origin': '*' },
+          headers: { "Accept": "application/json"},
           type: "POST",
+          url: "https://o64722rmyh.execute-api.us-east-1.amazonaws.com/beta",
           crossDomain: true,
+          beforeSend: function(xhr){
+            xhr.withCredentials = true;
+          },
           dataType: "json",
-          contentType: "application/json",
-          // dataType: "application/json",
+          contentType: 'application/json',
           data: JSON.stringify(json),
           success: function(data){
             console.log(data);
-          },
-          xhrFields: {
-            withCredentials: true
           }
-
-          // beforeSend: setHeader
         });
       }
 
@@ -73,10 +70,8 @@
         var pdf = new XMLHttpRequest();
         pdf.open("GET", path, false);
         pdf.onreadystatechange = function () {
-          // if (pdf.status === 200 || pdf.status == 0) {
             var pdfResponse = pdf.responseText;
             var pdfBase64 = btoa(unescape(encodeURIComponent(pdfResponse)));
-            // var pdfBase64 = 'data:application/pdf;base64,' + btoa(unescape(encodeURIComponent(pdfResponse)));
             pdfBase64Arr.push(pdfBase64);
         }
         pdf.send(null);
