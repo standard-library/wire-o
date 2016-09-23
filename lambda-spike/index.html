@@ -62,8 +62,9 @@
           contentType: 'application/json',
           data: JSON.stringify(json),
           success: function(response){
-            var base64String = btoa([].reduce.call(new Uint8Array(response.data),function(p,c){return p+String.fromCharCode(c)},''))
-            window.open("data:application/pdf;base64," + base64String);
+            console.log(response);
+            // var base64String = btoa([].reduce.call(new Uint8Array(response.data),function(p,c){return p+String.fromCharCode(c)},''))
+            window.open("data:application/pdf;base64," + response);
 
           }
         });
@@ -85,7 +86,7 @@
 
         if ($(".ambience").is(":checked")) {
           var ambienceUrl = "https://s3.amazonaws.com/superglue/ambience.pdf";
-          addPdf(ambienceUrl);
+          pdfUrlArray.push(ambienceUrl);
         };
 
         sendToAws(pdfUrlArray);

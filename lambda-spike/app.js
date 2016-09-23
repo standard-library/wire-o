@@ -15,14 +15,19 @@ var s3 = new AWS.S3();
 var uuid = require('node-uuid');
 
 exports.handler = function(event, context) {
-
   var urls = event.pdfUrls;
   async.each(urls, function(pdfUrl, callback) {
-    request(pdfUrl, function(err, response, buffer) {
+    var requestSettings = {
+        method: 'GET',
+        url: pdfUrl,
+        encoding: null
+     };
+
+    request(requestSettings, function(err, response, buffer) {
       var base64Pdf = new Buffer(buffer).toString('base64');
       if (!err) {
         writeToTmp(base64Pdf);
-        console.log('File encoded,');
+        console.log('File encoded.');
         callback();
       } else {
         callback('Error encoding file.');
@@ -37,34 +42,16 @@ exports.handler = function(event, context) {
     }
   });
 
-
-  // var base64Pdfs = event.data;
-  // async.each(base64Pdfs, function (base64Pdf, callback) {
-  //   var pdfBuffer = new Buffer(base64Pdf, 'base64');
-  //   if (pdfBuffer) {
-  //     console.log('base64Pdfs', base64Pdfs);
-  //     console.log('pdfBuffer', pdfBuffer);
-  //     writeToTmp(pdfBuffer);
-  //     console.log('Received file');
-  //     callback();
-  //   } else {
-  //     callback('Error getting file');
-  //   }
-  // }, function(err) {
-  //   if (err) {
-  //     console.log('File did not process.');
-  //   } else {
-  //     console.log('All files processed');
-  //     findTmpFiles();
-  //   }
-  // });
-
-  function writeToTmp(buffer, callback) {
-    fs.unlink('/tmp/', function(err) {console.log('tmp files deleted')});
+  function writeToTmp(base64) {
+    fs.unlink('/tmp/', function(err) { console.log('tmp files deleted') });
     var filePath = '/tmp/' + uuid.v4() + '.pdf'
-    fs.writeFile(filePath, buffer, function (err) {
-      if (err) return console.log(err);
-      console.log('worked!?');
+
+    fs.writeFile(filePath, new Buffer(base64, "base64"), function (err) {
+      if (err) {
+        console.log('Did not write file to tmp.');
+      } else {
+        console.log('Wrote file to tmp directory.');
+      }
     });
   }
 
@@ -90,21 +77,11 @@ exports.handler = function(event, context) {
     pdfMerge
       .asBuffer()
       .merge(function(error, buffer) {
-        var buffed = new Buffer(buffer).toString('base64');
-        console.log('buffed', buffed);
-        console.log('buffer', buffer)
-        // var params = { Bucket: 'superglue', Key: uuid.v4() + ".pdf", Body: buffed };
-        //
-        // s3.putObject(params, function (err, s3Data) {
-        //   if (err) {
-        //     console.log('error: ' + err);
-        //   } else {
-        //     console.log('success?');
-        //   }
-        // });
-
-        // var base64Merge = new Buffer(buffer).toString('base64');
-        context.succeed(buffer);
+        if (error) {
+          console.log('Error merging');
+        }
+        var mergedBase64 = new Buffer(buffer).toString('base64');
+        context.succeed(mergedBase64);
     });
   }
 }
