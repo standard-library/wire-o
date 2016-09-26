@@ -84,7 +84,7 @@
           data: JSON.stringify(json),
           success: function(data) {
             $("div.download-area > img").remove();
-            var link = "<a href='data:application/octet-stream;application/pdf;base64," + data +  "'" + "download='itop.pdf'>DOWNLOAD</a>";
+            var link = "<a href='data:application/octet-stream;application/pdf;base64," + data +  "'" + "download='itop.pdf' target='_blank'>DOWNLOAD</a>";
              $(".download-area").append(link);
           },
           error: function(response) {
