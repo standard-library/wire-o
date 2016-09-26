@@ -62,13 +62,14 @@
     </style>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="./assets/js/download.js"></script>
     <script>
 
 
       var sendToAws = function(pdfArr) {
 
         var json = { pdfUrls: pdfArr }
-        $(".download-area").append("<img src='./ajax-loader.gif' class='spinner'/>");
+        $(".download-area").append("<img src='./assets/img/ajax-loader.gif' class='spinner'/>");
 
         $.ajax({
           headers: { "Accept": "application/json"},
@@ -83,8 +84,8 @@
           data: JSON.stringify(json),
           success: function(data) {
             $("div.download-area > img").remove();
-            var link = "<a href='data:application/octet-stream;application/pdf;base64," + data +  "'>DOWNLOAD</a>";
-            $(".download-area").append(link);
+            var link = "<a href='data:application/octet-stream;application/pdf;base64," + data +  "'" + "download='itop.pdf'>DOWNLOAD</a>";
+             $(".download-area").append(link);
           },
           error: function(response) {
             $("div.download-area > img").remove();
