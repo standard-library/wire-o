@@ -40,20 +40,19 @@
         display: block;
       }
 
-      .download-button {
+      .download-area {
         font-family: "Times New Roman";
         font-size: 1.9em;
         margin-top: 1em;
-        border: 1px solid #000;
-        outline: none;
-        border-radius: 5px;
-        background-color: #fff;
       }
 
-      .hide {
-        position: absolute !important;
-        top: -9999px !important;
-        left: -9999px !important;
+      .download-area a {
+        padding: 4px;
+        color: #000;
+        text-decoration: none;
+        border: 1px solid #000;
+        border: 1px solid #000;
+        border-radius: 5px;
       }
 
     </style>
@@ -76,13 +75,10 @@
           dataType: "json",
           contentType: "application/json",
           data: JSON.stringify(json),
-          cache: false,
-
           success: function(response){
 
-            console.log(response.length);
-            window.open("data:application/pdf;base64," + response);
-            location.reload();
+            var link = "<a href='data:application/octet-stream;application/pdf;base64," + response +  "'>DOWNLOAD</a>";
+            $(".download-area").append(link);
           }
         });
       }
@@ -136,7 +132,8 @@
         <button class="superglue-that-button">SUPERGLUE TO THE RESCUE!</button>
       </form>
 
-      <button class="download-button hide">DOWNLOAD</button>
+      <div class="download-area"></div>
+
     </div>
   </body>
 </html>
