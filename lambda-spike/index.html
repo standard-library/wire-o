@@ -3,8 +3,6 @@
   <head>
     <title>SUPERGLUE (AWS Lambda Spike example)</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <style>
       body {
         margin-left: 1%;
@@ -49,6 +47,7 @@
 
 
       var sendToAws = function(pdfArr) {
+
         var json = { pdfUrls: pdfArr }
         $.ajax({
           headers: { "Accept": "application/json"},
@@ -59,21 +58,21 @@
             xhr.withCredentials = true;
           },
           dataType: "json",
-          contentType: 'application/json',
+          contentType: "application/json",
           data: JSON.stringify(json),
-          success: function(response){
-            console.log(response);
-            // var base64String = btoa([].reduce.call(new Uint8Array(response.data),function(p,c){return p+String.fromCharCode(c)},''))
-            window.open("data:application/pdf;base64," + response);
+          cache: false,
 
+          success: function(response){
+
+            console.log(response.length);
+            window.open("data:application/pdf;base64," + response);
+            location.reload();
           }
         });
       }
 
-      // not secure
       var checkerFinder = function() {
-        var pdfUrlArray = []
-
+        var pdfUrlArray = [];
         if ($(".pcah").is(":checked")) {
           var pcahUrl = "https://s3.amazonaws.com/superglue/PCAH_PDF_TEMPLATE.pdf";
           pdfUrlArray.push(pcahUrl);

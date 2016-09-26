@@ -5,17 +5,17 @@ var exec = require('child_process').exec;
 process.env['PATH'] = process.env['PATH'] + ':' + process.env['LAMBDA_TASK_ROOT'] + '/bin';
 process.env['LD_LIBRARY_PATH'] = process.env['LAMBDA_TASK_ROOT'] + '/bin';
 
-var PDFMerge = require('pdf-merge');
-var request = require('request');
-var async = require('async');
-var zlib = require('zlib');
-var fs = require('fs');
-var AWS = require('aws-sdk');
-var s3 = new AWS.S3();
-var uuid = require('node-uuid');
-
 exports.handler = function(event, context) {
+  var PDFMerge = require('pdf-merge');
+  var request = require('request');
+  var async = require('async');
+  var zlib = require('zlib');
+  var fs = require('fs');
+  var AWS = require('aws-sdk');
+  var s3 = new AWS.S3();
+  var uuid = require('node-uuid');
   var urls = event.pdfUrls;
+
   async.each(urls, function(pdfUrl, callback) {
     var requestSettings = {
         method: 'GET',
@@ -65,15 +65,19 @@ exports.handler = function(event, context) {
     });
   }
 
+  function deleteTmpFiles(files) {
+    files.forEach(function(file) {
+      fs.unlink(file);
+    });
+  }
+
   function mergeFiles(files) {
     for (var i in files) {
       files[i] = '/tmp/' + files[i];
     }
-    var pdfFiles = files;
 
     var pdftkPath = './bin/pdftk';
-    var pdfMerge = new PDFMerge(pdfFiles, pdftkPath);
-
+    var pdfMerge = new PDFMerge(files, pdftkPath);
     pdfMerge
       .asBuffer()
       .merge(function(error, buffer) {
@@ -81,7 +85,9 @@ exports.handler = function(event, context) {
           console.log('Error merging');
         }
         var mergedBase64 = new Buffer(buffer).toString('base64');
+        deleteTmpFiles(files);
         context.succeed(mergedBase64);
     });
   }
+
 }
