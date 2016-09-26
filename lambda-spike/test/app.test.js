@@ -2,4 +2,7 @@
 
 var expect = require('chai').expect;
 
-var myLambda = require('../app');
+var superglueLambda = require('../app');
+
+describe('superglueLambda', function() {
+});
