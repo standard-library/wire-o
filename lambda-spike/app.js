@@ -84,10 +84,18 @@ exports.handler = function(event, context) {
         if (error) {
           console.log('Error merging');
         }
-        var mergedBase64 = new Buffer(buffer).toString('base64');
-        deleteTmpFiles(files);
-        context.succeed(mergedBase64);
+        var key = 'merged/' + uuid.v4() + '.pdf';
+        var params = { Bucket: 'superglue', Key: key, Body: buffer};
+
+        s3.putObject(params, function (err, s3Data) {
+          if (err) {
+            console.log('Error sending to S3: ' + err);
+          }
+          deleteTmpFiles(files);
+          var link = 'https://s3.amazonaws.com/superglue/' + key;
+          console.log(link);
+          context.succeed(link);
+        });
     });
   }
-
 }
