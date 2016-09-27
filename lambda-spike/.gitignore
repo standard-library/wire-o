@@ -3,3 +3,6 @@
 app.zip
 first_pdf.tar.gz
 seond_pdf.tar.gz
+.env
+deploy.env
+event.json
