@@ -8,13 +8,16 @@ namespace Superglue;
 class MergedPDF
 {
 
-  function __construct($paths)
-  {
-    $this->paths = $paths;
+  public $path;
+
+  public static function write($filename, $contents) {
+    file_put_contents($filename, $contents);
+    return new MergedPDF($filename, $contents);
   }
 
-  public function path()
+  function __construct($path, $contents)
   {
-    return "/merged/" . md5(serialize($this->paths)) . "/reader.pdf";
+    $this->path = $path;
+    $this->contents = $contents;
   }
 }

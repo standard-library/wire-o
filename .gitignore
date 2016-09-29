@@ -1,3 +1,4 @@
 /vendor/
 /logs/*.log
 !/logs/README.md
+/public/merged/**/*.pdf

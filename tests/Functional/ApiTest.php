@@ -7,12 +7,12 @@ class ApiTest extends BaseTestCase
     /**
      * Test that the index route returns a rendered response
      */
-    public function testGetEndpoint()
+    public function testPostEndpoint()
     {
         $response = $this->runApp('POST', '/merge', [
           'pdfPaths' => [
-            'ambience.pdf',
-            'hello.pdf'
+            '/ambience.pdf',
+            '/hello.pdf'
           ]
         ]);
 
