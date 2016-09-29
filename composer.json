@@ -20,14 +20,18 @@
     "require-dev": {
         "phpunit/phpunit": ">=4.8 < 6.0"
     },
+    "autoload": {
+        "psr-4": {
+            "Superglue\\": "src/superglue/"
+        }
+    },
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
         }
     },
-	"scripts": {
+    "scripts": {
         "start": "php -S 0.0.0.0:8080 -t public public/index.php",
         "test": "phpunit"
-	}
-
+    }
 }

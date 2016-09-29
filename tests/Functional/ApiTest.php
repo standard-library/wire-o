@@ -9,7 +9,12 @@ class ApiTest extends BaseTestCase
      */
     public function testGetEndpoint()
     {
-        $response = $this->runApp('POST', '/merge');
+        $response = $this->runApp('POST', '/merge', [
+          'pdfPaths' => [
+            'ambience.pdf',
+            'hello.pdf'
+          ]
+        ]);
 
         $this->assertEquals(200, $response->getStatusCode());
     }
@@ -19,8 +24,14 @@ class ApiTest extends BaseTestCase
      */
     public function testEndpointReturnsJson()
     {
-        $response = $this->runApp('POST', '/merge');
+        $response = $this->runApp('POST', '/merge', [
+          'pdfPaths' => [
+            '/ambience.pdf',
+            '/hello.pdf'
+          ]
+        ]);
 
-        $this->assertEquals('{"one":"two"}', (string) $response->getBody());
+        $expected = '{"mergedPDF":"http:\/\/localhost\/merged\/9cd9f057d4bf4cb0108d30790f733401\/reader.pdf"}';
+        $this->assertEquals($expected, (string) $response->getBody());
     }
 }
