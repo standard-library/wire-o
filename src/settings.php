@@ -1,4 +1,7 @@
 <?php
+
+error_reporting(E_ALL ^ E_DEPRECATED);
+
 return [
     'settings' => [
         'pdfDestination' => __DIR__ . '/../public/merged/',
@@ -6,6 +9,11 @@ return [
         'basePath' => __DIR__ . '/../public/',
         'displayErrorDetails' => true, // set to false in production
         'addContentLengthHeader' => false, // Allow the web server to send the content-length header
+
+        // Renderer settings
+        'renderer' => [
+            'template_path' => __DIR__ . '/../templates/',
+        ],
 
         // Monolog settings
         'logger' => [

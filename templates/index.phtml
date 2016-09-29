@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SUPERGLUE (PHP Spike example)</title>
+
+    <style>
+      body {
+        margin-left: 1%;
+      }
+
+      body, h1, h2 {
+        margin-top: 0;
+        font-weight: lighter;
+      }
+
+      .name {
+        font-size: 2em;
+        text-decoration: underline;
+      }
+
+      .togetherness {
+        font-style: italic;
+      }
+
+      .pdf-options {
+        margin-left: 2%;
+      }
+
+      form {
+        font-weight: normal;
+        font-style: italic;
+        font-size: 1.3em;
+      }
+
+      ul {
+        list-style: none;
+      }
+
+      button {
+        display: block;
+      }
+
+      .download-area {
+        font-family: "Times New Roman";
+        font-size: 1.9em;
+        margin-top: 1em;
+      }
+
+      .download-area a {
+        padding: 4px;
+        color: #000;
+        text-decoration: none;
+        border: 1px solid #000;
+        border-radius: 5px;
+      }
+
+      .spinner {
+        margin-left: 2em;
+      }
+
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+    <script>
+      var sendToAws = function(pdfArr) {
+        $(".download-area").append("<img src='./assets/img/ajax-loader.gif' class='spinner'/>");
+
+        $.ajax({
+          headers: { "Accept": "application/json"},
+          type: "POST",
+          url: "/merge",
+          dataType: "json",
+          contentType: "application/json",
+          data: JSON.stringify({ pdfPaths: pdfArr }),
+          success: function(data) {
+            var link = "<a href='" + data['mergedPDF'] + "' class='download-link' target='_blank'>" + "DOWNLOAD</a>";
+
+            $("div.download-area > img").remove();
+            $(".download-area").append(link);
+
+            $(".download-link").click(function(){
+              $(".download-link").remove();
+            });
+          },
+          error: function(response) {
+            $("div.download-area > img").remove();
+          }
+        });
+      }
+
+      var checkerFinder = function() {
+        var pdfUrlArray = [];
+        if ($(".pcah").is(":checked")) {
+          var pcahUrl = "/PCAH_PDF_TEMPLATE.pdf";
+          pdfUrlArray.push(pcahUrl);
+        };
+
+        if ($(".hello").is(":checked")) {
+          var helloUrl = "/hello.pdf";
+          pdfUrlArray.push(helloUrl);
+        };
+
+        if ($(".ambience").is(":checked")) {
+          var ambienceUrl = "/ambience.pdf";
+          pdfUrlArray.push(ambienceUrl);
+        };
+
+        sendToAws(pdfUrlArray);
+      }
+
+      var buttonPressed = function() {
+        $(".superglue-that-button").click(function(event){
+          event.preventDefault();
+          checkerFinder();
+        });
+      }
+
+      $(function() {
+        buttonPressed();
+      });
+    </script>
+  </head>
+
+  <body>
+    <h1><span class="name">SUPERGLUE</span> <small>Let's glue a limited set of PDFs <span class="togetherness">together</span>.</small></h1>
+    <div class="pdf-options">
+      <h2>What do you want to glue today?</h2>
+
+      <form>
+        <ul>
+          <li><input type="checkbox" class="pcah">the famous PCAH template pdf</input></li>
+          <li><input type="checkbox" class="hello">the radical 'hello' pdf</input></li>
+          <li><input type="checkbox" class="ambience">the renowned 'ambience' pdf</input></li>
+        </ul>
+        <button class="superglue-that-button">SUPERGLUE TO THE RESCUE!</button>
+      </form>
+
+      <div class="download-area"></div>
+
+    </div>
+  </body>
+</html>

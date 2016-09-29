@@ -7,6 +7,16 @@ class ApiTest extends BaseTestCase
     /**
      * Test that the index route returns a rendered response
      */
+    public function testGetEndpoint()
+    {
+        $response = $this->runApp('GET', '/');
+
+        $this->assertEquals(200, $response->getStatusCode());
+    }
+
+    /**
+     * Test that the index route returns a rendered response
+     */
     public function testPostEndpoint()
     {
         $response = $this->runApp('POST', '/merge', [
