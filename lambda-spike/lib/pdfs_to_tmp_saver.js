@@ -3,20 +3,20 @@ var request = require('request');
 var uuid = require('node-uuid');
 var fs = require('fs');
 
+var writeToTmp = function(base64) {
+  var filePath = '/tmp/' + uuid.v4() + '.pdf'
+
+  fs.writeFile(filePath, new Buffer(base64, "base64"), function (err) {
+    if (err) {
+      console.log('Did not write file to tmp.');
+    } else {
+      console.log('Wrote file to tmp directory.');
+    }
+  });
+}
+
 var pdfsToTmpSaver = function(urls, cb) {
-
   console.time('save pdfs to tmp directory');
-  function writeToTmp(base64) {
-    var filePath = '/tmp/' + uuid.v4() + '.pdf'
-
-    fs.writeFile(filePath, new Buffer(base64, "base64"), function (err) {
-      if (err) {
-        console.log('Did not write file to tmp.');
-      } else {
-        console.log('Wrote file to tmp directory.');
-      }
-    });
-  }
 
   async.each(urls, function(pdfUrl, callback) {
     var requestSettings = {
