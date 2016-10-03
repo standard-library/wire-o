@@ -16,6 +16,7 @@ exports.handler = function(event, context) {
   var uuid = require('node-uuid');
   var urls = event.pdfUrls;
 
+  console.time('lambda runtime');
   async.each(urls, function(pdfUrl, callback) {
     var requestSettings = {
         method: 'GET',
@@ -93,7 +94,8 @@ exports.handler = function(event, context) {
           }
           deleteTmpFiles(files);
           var link = 'https://s3.amazonaws.com/superglue/' + key;
-          console.log(link);
+
+          console.timeEnd('lambda runtime');
           context.succeed(link);
         });
     });

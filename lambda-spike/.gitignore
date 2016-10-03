@@ -2,7 +2,6 @@
 .DS_Store
 app.zip
 first_pdf.tar.gz
-seond_pdf.tar.gz
+second_pdf.tar.gz
 .env
 deploy.env
-event.json
