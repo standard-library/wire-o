@@ -37,6 +37,7 @@ exports.handler = function(event, context) {
   }
 
   function mergeFiles(files) {
+    console.log('# of files to merge: ' + files.length);
     console.time('merge pdfs');
     for (var i in files) {
       files[i] = '/tmp/' + files[i];
