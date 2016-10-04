@@ -7,9 +7,8 @@ do
   echo "# of pdfs: " $i
   if  [ $i = "1" ]; then
     arr+=$pdf
-
     json="{\"pdfUrls\": [\"$arr\"]}"
-  elif [ $i = "10" ]; then
+  elif [ $i = "101" ]; then
     arr+=$comma\"$pdf
     json="{\"pdfUrls\": [\"$arr\"]}"
   else

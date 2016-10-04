@@ -5,3 +5,4 @@ first_pdf.tar.gz
 second_pdf.tar.gz
 .env
 deploy.env
+/perf/lambda.log
