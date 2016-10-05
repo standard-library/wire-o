@@ -15,7 +15,9 @@ var writeToTmp = function(base64) {
   });
 }
 
+
 var pdfsToTmpSaver = function(urls, cb) {
+// var pdfsToTmpSaver = function(urls) {
   console.time('save pdfs to tmp directory');
 
   async.each(urls, function(pdfUrl, callback) {
@@ -24,7 +26,6 @@ var pdfsToTmpSaver = function(urls, cb) {
       url: pdfUrl,
       encoding: null
     };
-
     request(requestSettings, function(err, response, buffer) {
       var base64Pdf = new Buffer(buffer).toString('base64');
       if (!err) {

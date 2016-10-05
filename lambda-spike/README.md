@@ -39,61 +39,80 @@ off with merging 1 PDF to sending 100 PDFs to merge. After you start this script
 Average Lambda duration went from ~2624ms at the beginning (1 PDF to merge) to ~7826 ms (100 PDFs to merge) to the end.
 It’s interesting seeing how the lambda warms up; the first run (1 PDF to merge) took 4242ms, but the second run (2 PDFs to merge) took 1158ms.
 
-Various parts of the process were logged in CloudWatch. This CloudWatch log is still being parsed through, but here is a sense of the times:
+Various parts of the process were logged in CloudWatch:
 
-- **no. of files to merge**: 1
-- **save pdfs to tmp directory**: 702ms
-- **get file names of files in tmp directory**: 1ms
-- **merge pdfs**: 979ms
-- **delete files in tmp folder after merging pdfs**: 1ms
-- **upload merged pdf to S3**: 1ms
-- **total lambda runtime**: 4242ms
-
-- **no. of files to merge**: 2
-- **save pdfs to tmp directory**: 175ms
-- **get file names of files in tmp directory**: 1ms
-- **merge pdfs**: 825ms
-- **delete files in tmp folder after merging pdfs**: 0ms
-- **upload merged pdf to S3**:  0ms
-- **total lambda runtime**: 1158ms
-
-- **no. of files to merge**: 25
-- **save pdfs to tmp directory**: 1562ms
-- **get file names of files in tmp directory**: 57ms
-- **merge pdfs**: 1780ms
-- **delete files in tmp folder after merging pdfs**: 0ms
-- **upload merged pdf to S3**:  0ms
-- **total lambda runtime**: 3896ms
-
-- **no. of files to merge**: 50
-- **save pdfs to tmp directory**: 3296ms
-- **get file names of files in tmp directory**: 14ms
-- **merge pdfs**: 3000ms
-- **delete files in tmp folder after merging pdfs**: 0ms
-- **upload merged pdf to S3**:  0ms
-- **total lambda runtime**: 6488ms
-
-- **no. of files to merge**: 75
-- **save pdfs to tmp directory**: 3986ms
-- **get file names of files in tmp directory**: 1ms
-- **merge pdfs**: 3829ms
-- **delete files in tmp folder after merging pdfs**: 0ms
-- **upload merged pdf to S3**:  0ms
-- **total lambda runtime**: 8193ms
-
-- **no. of files to merge**: 100
-- **max memory used: 118 MB**
-- **save pdfs to tmp directory**: 4910ms
-- **get file names of files in tmp directory**: 58ms
-- **merge pdfs**: 5179ms
-- **delete files in tmp folder after merging pdfs**: 17ms
-- **upload merged pdf to S3**: 17ms
-- **total lambda runtime**: 10407ms
+```
+- # of files to merge: 1
+- save pdfs to tmp directory: 702ms
+- get file names of files in tmp directory: 1ms
+- merge pdfs: 979ms
+- delete files in tmp folder after merging pdfs: 1ms
+- upload merged pdf to S3: 1ms
+- total lambda runtime: 4242ms
+```
 
 
-*Ex. of how to download logs (goes up to 10,000 log events) on the cli*:
+```
+- # of files to merge: 1
+- save pdfs to tmp directory: 702ms
+- get file names of files in tmp directory: 1ms
+- merge pdfs: 979ms
+- delete files in tmp folder after merging pdfs: 1ms
+- upload merged pdf to S3: 1ms
+- total lambda runtime: 4242ms
+```
+```
+- # of files to merge: 2
+- save pdfs to tmp directory: 175ms
+- get file names of files in tmp directory**: 1ms
+- merge pdfs: 825ms
+- delete files in tmp folder after merging pdfs**: 0ms
+- **upload merged pdf to S3:  0ms
+- total lambda runtime: 1158ms
+```
+```
+- # of files to merge: 25
+- save pdfs to tmp directory: 1562ms
+- get file names of files in tmp directory: 57ms
+- merge pdfs: 1780ms
+- delete files in tmp folder after merging pdfs: 0ms
+- upload merged pdf to S3:  0ms
+- total lambda runtime: 3896ms
+```
+```
+- # of files to merge: 50
+- save pdfs to tmp directory: 3296ms
+- get file names of files in tmp directory: 14ms
+- merge pdfs: 3000ms
+- delete files in tmp folder after merging pdfs: 0ms
+- upload merged pdf to S3:  0ms
+- total lambda runtime: 6488ms
+```
+```
+- # of files to merge: 75
+- save pdfs to tmp directory: 3986ms
+- get file names of files in tmp directory: 1ms
+- merge pdfs: 3829ms
+- delete files in tmp folder after merging pdfs: 0ms
+- upload merged pdf to S3:  0ms
+- total lambda runtime: 8193ms
+```
+```
+- # of files to merge: 100
+- max memory used: 118 MB
+- save pdfs to tmp directory: 4910ms
+- get file names of files in tmp directory: 58ms
+- merge pdfs: 5179ms
+- delete files in tmp folder after merging pdfs: 17ms
+- upload merged pdf to S3: 17ms
+- total lambda runtime: 10407ms
+```
 
-`aws logs get-log-events --region us-east-1 --log-group-name /aws/lambda/mergePdfs --log-stream-name 2016/10/03/[\$LATEST]e00b77d0d762412dbe7ecdcf3d3da7e3 --output text>lambda.log`
+*Ex. of how to download logs (goes up to 10,000 log events) on the AWS CLI*:
+
+```
+aws logs get-log-events --region us-east-1 --log-group-name /aws/lambda/mergePdfs --log-stream-name 2016/10/03/[\$LATEST]e00b77d0d762412dbe7ecdcf3d3da7e3 --output text>lambda.log
+```
 
 
 ## Want to update the Lambda?
