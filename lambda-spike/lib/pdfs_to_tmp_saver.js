@@ -3,7 +3,7 @@ var request = require('request');
 var uuid = require('node-uuid');
 var fs = require('fs');
 
-var writeToTmp = function(base64) {
+function writeToTmp(base64) {
   var filePath = '/tmp/' + uuid.v4() + '.pdf'
 
   fs.writeFile(filePath, new Buffer(base64, "base64"), function (err) {
@@ -15,12 +15,10 @@ var writeToTmp = function(base64) {
   });
 }
 
-
-var pdfsToTmpSaver = function(urls, cb) {
-// var pdfsToTmpSaver = function(urls) {
+function pdfsToTmpSaver(urls, callback) {
   console.time('save pdfs to tmp directory');
 
-  async.each(urls, function(pdfUrl, callback) {
+  async.each(urls, function(pdfUrl, cb) {
     var requestSettings = {
       method: 'GET',
       url: pdfUrl,
@@ -31,18 +29,19 @@ var pdfsToTmpSaver = function(urls, cb) {
       if (!err) {
         writeToTmp(base64Pdf);
         console.log('File encoded.');
-        callback();
+        cb();
       } else {
-        callback('Error encoding file.');
+        cb('Error encoding file.');
       }
     });
   }, function(err) {
     if (err) {
       console.log('File did not process');
+      callback(err, null);
     } else {
       console.log('All files processed');
       console.timeEnd('save pdfs to tmp directory');
-      cb();
+      callback(null);
     }
   });
 }
