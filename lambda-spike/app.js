@@ -54,15 +54,15 @@ exports.handler = function(event, context) {
 
     pdfMerge.asBuffer().promise().then(function(buffer) {
       console.timeEnd('merge pdfs');
-      callback(null, buffer);
-      deleteTmpFiles(files);
+      callback(null, buffer, files);
     }).catch(function(err) {
       console.log('Error merging PDFs: ' + err);
       callback(err, null)
     });
+
   }
 
-  function uploadMergedPdfToS3(buffer, callback) {
+  function uploadMergedPdfToS3(buffer, files, callback) {
     var key = 'merged/' + uuid.v4() + '.pdf';
     var params = { Bucket: 'superglue', Key: key, Body: buffer};
 
@@ -76,7 +76,7 @@ exports.handler = function(event, context) {
       var link = 'https://s3.amazonaws.com/superglue/' + key;
       console.timeEnd('upload merged pdf to S3');
       console.timeEnd('lambda runtime');
-      callback(null, callback)
+      callback(null, files)
       context.succeed(link);
     });
   }
@@ -84,9 +84,9 @@ exports.handler = function(event, context) {
   function deleteTmpFiles(files) {
     console.time('delete files in tmp folder after merging pdfs');
 
-    async.each(file, function(file, callback) {
+    async.each(files, function(file, callback) {
       fs.unlink(file);
-      callback();
+      callback(null);
     }, function(err) {
     if (err) {
       console.log('A file did not delete.');
@@ -108,6 +108,7 @@ exports.handler = function(event, context) {
     mergeFiles,
     uploadMergedPdfToS3
   ], function (error, result) {
+    deleteTmpFiles(result);
     if (error) {
       console.log(err);
     } else {

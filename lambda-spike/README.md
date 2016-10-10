@@ -30,7 +30,9 @@ The JSON response body provides a link (for instance,
 Run './test_lambda.sh', which sends more and more of the `https://s3.amazonaws.com/superglue/hello.pdf` PDF to be merged. It first starts
 off with merging 1 PDF to sending 100 PDFs to merge. After you start this script, you can then look in AWS CloudWatch to see the metrics of each run.
 
-### Results from initial performance run on 10/3/2016:
+### Results from initial performance run on 10/3/2016
+
+*Size of PDF*: 7.3kb
 
 [duration_graph]: https://github.com/standard-library/superglue/blob/aws-lambda/lambda-spike/perf/duration.png "duration graph"
 
@@ -40,17 +42,6 @@ Average Lambda duration went from ~2624ms at the beginning (1 PDF to merge) to ~
 It’s interesting seeing how the lambda warms up; the first run (1 PDF to merge) took 4242ms, but the second run (2 PDFs to merge) took 1158ms.
 
 Various parts of the process were logged in CloudWatch:
-
-```
-- # of files to merge: 1
-- save pdfs to tmp directory: 702ms
-- get file names of files in tmp directory: 1ms
-- merge pdfs: 979ms
-- delete files in tmp folder after merging pdfs: 1ms
-- upload merged pdf to S3: 1ms
-- total lambda runtime: 4242ms
-```
-
 
 ```
 - # of files to merge: 1
@@ -108,7 +99,73 @@ Various parts of the process were logged in CloudWatch:
 - total lambda runtime: 10407ms
 ```
 
-*Ex. of how to download logs (goes up to 10,000 log events) on the AWS CLI*:
+### Results from 2nd performance run on 10/10/2016
+
+This run was performed using a larger PDF than in the 1st run.
+*Size of PDF*: 18.7kb
+
+[duration_graph2]: https://github.com/standard-library/superglue/blob/aws-lambda/lambda-spike/perf/duration2.png "duration graph"
+
+![alt text][duration_graph2]
+Average Lambda duration went from ~4220ms at the beginning (1 set of PDFs to merge) to ~11600ms (100 set of PDFS to merge).
+
+```
+- # of files to merge: 1
+- save pdfs to tmp directory: 597ms
+- get file names of files in tmp directory: 2ms
+- merge pdfs: 979ms
+- delete files in tmp folder after merging pdfs: 0ms
+- upload merged pdf to S3: 0ms
+- total lambda runtime: 3759ms
+```
+```
+- # of files to merge: 2
+- save pdfs to tmp directory: 136ms
+- get file names of files in tmp directory: 19ms
+- merge pdfs: 900ms
+- delete files in tmp folder after merging pdfs: 0ms
+- upload merged pdf to S3: 0ms
+- total lambda runtime: 1204ms
+```
+```
+- # of files to merge: 25
+- save pdfs to tmp directory: 1421ms
+- get file names of files in tmp directory: 1ms
+- merge pdfs: 2617ms
+- delete files in tmp folder after merging pdfs: 0ms
+- upload merged pdf to S3: 0ms
+- total lambda runtime: 4219ms
+```
+```
+- # of files to merge: 50
+- save pdfs to tmp directory: 2960ms
+- get file names of files in tmp directory: 0ms
+- merge pdfs: 4180ms
+- delete files in tmp folder after merging pdfs: 20ms
+- upload merged pdf to S3: 1ms
+- total lambda runtime: 7680ms
+```
+```
+- # of files to merge: 75
+- save pdfs to tmp directory: 3710ms
+- get file names of files in tmp directory: 78ms
+- merge pdfs: 5881ms
+- delete files in tmp folder after merging pdfs: 12ms
+- upload merged pdf to S3: 0ms
+- total lambda runtime: 10048ms
+```
+```
+- # of files to merge: 100
+- save pdfs to tmp directory: 5298ms
+- get file names of files in tmp directory: 31ms
+- merge pdfs: 7320ms
+- delete files in tmp folder after merging pdfs: 1ms
+- upload merged pdf to S3: 0ms
+- total lambda runtime: 12920ms
+```
+
+
+### How to download logs (goes up to 10,000 log events) on the AWS CLI:
 
 ```
 aws logs get-log-events --region us-east-1 --log-group-name /aws/lambda/mergePdfs --log-stream-name 2016/10/03/[\$LATEST]e00b77d0d762412dbe7ecdcf3d3da7e3 --output text>lambda.log

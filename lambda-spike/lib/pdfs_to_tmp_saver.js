@@ -8,9 +8,9 @@ function writeToTmp(base64) {
 
   fs.writeFile(filePath, new Buffer(base64, "base64"), function (err) {
     if (err) {
-      console.log('Did not write file to tmp.');
+      // console.log('Did not write file to tmp.');
     } else {
-      console.log('Wrote file to tmp directory.');
+      // console.log('Wrote file to tmp directory.');
     }
   });
 }
@@ -28,10 +28,10 @@ function pdfsToTmpSaver(urls, callback) {
       var base64Pdf = new Buffer(buffer).toString('base64');
       if (!err) {
         writeToTmp(base64Pdf);
-        console.log('File encoded.');
+        // console.log('File encoded.');
         cb();
       } else {
-        cb('Error encoding file.');
+        // cb('Error encoding file.');
       }
     });
   }, function(err) {
