@@ -164,6 +164,10 @@ Average Lambda duration went from ~4220ms at the beginning (1 set of PDFs to mer
 - total lambda runtime: 12920ms
 ```
 
+### Results from 3rd performance run on 10/10/2016
+22:46:37.773Z
+This run was performed using a larger PDF than in the 1st run.
+*Size of PDF*: 96.7kb
 
 ### How to download logs (goes up to 10,000 log events) on the AWS CLI:
 

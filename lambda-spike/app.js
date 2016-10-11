@@ -11,40 +11,12 @@ var AWS = require('aws-sdk');
 var uuid = require('node-uuid');
 var s3 = new AWS.S3();
 var async = require('async');
+var mkdirp = require('mkdirp');
 
 exports.handler = function(event, context) {
   console.time('lambda runtime');
 
   var pdfsToTmpSaver = require('./lib/pdfs_to_tmp_saver');
-
-  function findTmpFiles(callback) {
-    console.time('get tmp file names');
-    fs.readdir('/tmp/', function (err, files) {
-      if (err) {
-        console.log('Error reading file from bin directory: ' + err);
-        callback(err);
-      } else {
-        console.timeEnd('get tmp file names');
-        callback(null, files);
-      }
-    });
-  }
-
-  function renameTmpFileNames(files, callback) {
-    console.time('rename tmp files');
-    async.map(files, function(file, cb) {
-      file = '/tmp/' + file;
-      cb(null, file);
-    }, function(err, results) {
-      if (err) {
-        console.log('Getting and saving file name failed:' + err);
-        callback(err, null);
-      } else {
-        console.timeEnd('rename tmp files');
-        callback(null, results);
-      }
-    });
-  }
 
   function mergeFiles(files, callback) {
     console.log('# of files to merge: ' + files.length)
@@ -59,10 +31,10 @@ exports.handler = function(event, context) {
       console.log('Error merging PDFs: ' + err);
       callback(err, null)
     });
-
   }
 
   function uploadMergedPdfToS3(buffer, files, callback) {
+
     var key = 'merged/' + uuid.v4() + '.pdf';
     var params = { Bucket: 'superglue', Key: key, Body: buffer};
 
@@ -76,45 +48,45 @@ exports.handler = function(event, context) {
       var link = 'https://s3.amazonaws.com/superglue/' + key;
       console.timeEnd('upload merged pdf to S3');
       console.timeEnd('lambda runtime');
-      callback(null, files)
+      callback(null, callback)
       context.succeed(link);
     });
   }
 
   function deleteTmpFiles(files) {
     console.time('delete files in tmp folder after merging pdfs');
-
-    async.each(files, function(file, callback) {
+    async.each(file, function(file, callback) {
       fs.unlink(file);
-      callback(null);
+      callback();
     }, function(err) {
-    if (err) {
-      console.log('A file did not delete.');
-    } else {
-      console.log('All files have been deleted successfully');
-      console.timeEnd('delete files in tmp folder after merging pdfs');
-    }
-  });
-
+      if (err) {
+        console.log('A file did not delete.');
+      } else {
+        console.log('All files have been deleted successfully');
+        console.timeEnd('delete files in tmp folder after merging pdfs');
+      }
+    });
   }
 
   async.waterfall([
     function(cb) {
-      cb(null, event.pdfUrls);
+      var folderPath = uuid.v4();
+      var dir = '/tmp/' + folderPath + '/';
+      mkdirp(dir, function (err) {
+        if (err) console.error(err)
+        else console.log('pow!')
+      });
+
+      cb(null, event.pdfUrls, dir);
     },
     pdfsToTmpSaver,
-    findTmpFiles,
-    renameTmpFileNames,
     mergeFiles,
     uploadMergedPdfToS3
   ], function (error, result) {
-    deleteTmpFiles(result);
     if (error) {
       console.log(err);
     } else {
       console.log('waterfall success?');
     }
   });
-
-
 }

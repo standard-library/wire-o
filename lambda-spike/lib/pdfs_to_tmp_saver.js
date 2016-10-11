@@ -3,20 +3,23 @@ var request = require('request');
 var uuid = require('node-uuid');
 var fs = require('fs');
 
-function writeToTmp(base64) {
-  var filePath = '/tmp/' + uuid.v4() + '.pdf'
+function writeToTmp(base64, folderPath, callback) {
+  var filePath = folderPath + uuid.v4() + '.pdf'
 
-  fs.writeFile(filePath, new Buffer(base64, "base64"), function (err) {
+  fs.writeFile(filePath, new Buffer(base64, 'base64'), function (err) {
     if (err) {
-      // console.log('Did not write file to tmp.');
+      console.log('Did not write file to tmp.');
+      callback(err);
     } else {
-      // console.log('Wrote file to tmp directory.');
+      console.log('Wrote file to tmp directory.');
+      callback(null, filePath);
     }
   });
 }
 
-function pdfsToTmpSaver(urls, callback) {
+function pdfsToTmpSaver(urls, directory, callback) {
   console.time('save pdfs to tmp directory');
+  var files = [];
 
   async.each(urls, function(pdfUrl, cb) {
     var requestSettings = {
@@ -25,13 +28,14 @@ function pdfsToTmpSaver(urls, callback) {
       encoding: null
     };
     request(requestSettings, function(err, response, buffer) {
-      var base64Pdf = new Buffer(buffer).toString('base64');
       if (!err) {
-        writeToTmp(base64Pdf);
-        // console.log('File encoded.');
-        cb();
-      } else {
-        // cb('Error encoding file.');
+        var base64Pdf = new Buffer(buffer).toString('base64');
+        writeToTmp(base64Pdf, directory, function(err, file) {
+          if (!err) {
+            files.push(file);
+            cb();
+          }
+        });
       }
     });
   }, function(err) {
@@ -41,7 +45,7 @@ function pdfsToTmpSaver(urls, callback) {
     } else {
       console.log('All files processed');
       console.timeEnd('save pdfs to tmp directory');
-      callback(null);
+      callback(null, files);
     }
   });
 }
