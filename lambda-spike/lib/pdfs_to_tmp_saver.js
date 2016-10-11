@@ -8,10 +8,8 @@ function writeToTmp(base64, folderPath, callback) {
 
   fs.writeFile(filePath, new Buffer(base64, 'base64'), function (err) {
     if (err) {
-      console.log('Did not write file to tmp.');
       callback(err);
     } else {
-      console.log('Wrote file to tmp directory.');
       callback(null, filePath);
     }
   });

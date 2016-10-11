@@ -164,10 +164,53 @@ Average Lambda duration went from ~4220ms at the beginning (1 set of PDFs to mer
 - total lambda runtime: 12920ms
 ```
 
-### Results from 3rd performance run on 10/10/2016
+### Results from 3rd performance run on 10/11/2016
 22:46:37.773Z
-This run was performed using a larger PDF than in the 1st run.
+This run was performed using a larger PDF than in the 1st and 2nd runs.
 *Size of PDF*: 96.7kb
+
+start: 17:09
+```
+- # of files to merge: 1
+- save pdfs to tmp directory: 700ms
+<!-- - get file names of files in tmp directory: 2ms -->
+- merge pdfs: 1140ms
+<!-- - delete files in tmp folder after merging pdfs: 0ms -->
+- upload merged pdf to S3: 0ms
+- total lambda runtime: 4175ms
+```
+
+```
+- # of files to merge: 2
+- save pdfs to tmp directory: 460ms
+<!-- - get file names of files in tmp directory: 2ms -->
+- merge pdfs: 1180ms
+<!-- - delete files in tmp folder after merging pdfs: 0ms -->
+- upload merged pdf to S3: 0ms
+- total lambda runtime: 2045ms
+```
+
+```
+- # of files to merge: 25
+- save pdfs to tmp directory: 1893ms
+<!-- - get file names of files in tmp directory: 2ms -->
+- merge pdfs: 6100ms
+<!-- - delete files in tmp folder after merging pdfs: 0ms -->
+- upload merged pdf to S3: 0ms
+- total lambda runtime: 8423ms
+```
+
+```
+- # of files to merge: 50
+- save pdfs to tmp directory: 3292ms
+<!-- - get file names of files in tmp directory: 2ms -->
+- merge pdfs: 11881ms
+<!-- - delete files in tmp folder after merging pdfs: 0ms -->
+- upload merged pdf to S3: 0ms
+- total lambda runtime: 15816ms
+```
+
+Around the ~60 PDFs mark (5.8mb), the Lambda function started to time out, as execution time was capped at 20s. This execution time is set by the AWS dev/user. Most likely, if the function execution time wasn't capped, the Lambda function would have started failing because it would start exceeding the memory, which by default is/was set to 128mb. Memory and execution time can both be increased if there is a need to do so, though the cost to run Lambdas may also increase.
 
 ### How to download logs (goes up to 10,000 log events) on the AWS CLI:
 
