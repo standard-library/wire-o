@@ -68,7 +68,7 @@ exports.handler = function(event, context) {
   }
 
   async.waterfall([
-    function(cb) {
+    function(callback) {
       var folderPath = uuid.v4();
       var dir = '/tmp/' + folderPath + '/';
       mkdirp(dir, function (err) {
@@ -76,7 +76,7 @@ exports.handler = function(event, context) {
         else console.log('pow!')
       });
 
-      cb(null, event.pdfUrls, dir);
+      callback(null, event.pdfUrls, dir);
     },
     pdfsToTmpSaver,
     mergeFiles,
