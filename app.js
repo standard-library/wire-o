@@ -9,13 +9,15 @@ var PDFMerge = require('pdf-merge');
 var fs = require('fs');
 var AWS = require('aws-sdk');
 var uuid = require('node-uuid');
-var s3 = new AWS.S3();
 var async = require('async');
 var mkdirp = require('mkdirp');
+
+AWS.config.setPromisesDependency(null);
 
 exports.handler = function(event, context) {
   console.time('lambda runtime');
 
+  var s3 = new AWS.S3();
   var pdfsToTmpSaver = require('./lib/pdfs_to_tmp_saver');
 
   function mergeFiles(files, callback) {
@@ -29,7 +31,7 @@ exports.handler = function(event, context) {
       callback(null, buffer, files);
     }).catch(function(err) {
       console.log('Error merging PDFs: ' + err);
-      callback(err, null)
+      callback(err, null);
     });
   }
 
@@ -37,17 +39,21 @@ exports.handler = function(event, context) {
     var key = 'merged/' + uuid.v4() + '.pdf';
     var params = { Bucket: 'superglue', Key: key, Body: buffer};
 
-    s3.putObject(params, function (err, s3Data) {
-      console.time('upload merged pdf to S3');
+    console.time('upload merged pdf to S3');
 
-      if (err) {
-        console.log('Error sending to S3: ' + err);
-        callback(err, null);
-      }
+    var s3upload = s3.putObject(params).promise();
+
+    s3upload.catch(function (err) {
+      console.log('Error sending to S3: ' + err);
+      return callback(err, null);
+    });
+
+    s3upload.then(function (data) {
       var link = 'https://s3.amazonaws.com/superglue/' + key;
       console.timeEnd('upload merged pdf to S3');
       console.timeEnd('lambda runtime');
-      callback(null, callback)
+
+      callback(null, link)
       context.succeed(link);
     });
   }
@@ -71,9 +77,10 @@ exports.handler = function(event, context) {
     function(callback) {
       var folderPath = uuid.v4();
       var dir = '/tmp/' + folderPath + '/';
+
       mkdirp(dir, function (err) {
         if (err) console.error(err)
-        else console.log('pow!')
+        else console.log('created ' + dir)
       });
 
       callback(null, event.pdfUrls, dir);
@@ -83,7 +90,7 @@ exports.handler = function(event, context) {
     uploadMergedPdfToS3
   ], function (error, result) {
     if (error) {
-      console.log(err);
+      console.log(error);
     } else {
       console.log('waterfall success?');
     }
