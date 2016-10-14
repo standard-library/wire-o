@@ -1,4 +1,3 @@
-
 'use strict';
 
 var exec = require('child_process').exec;
@@ -35,7 +34,6 @@ exports.handler = function(event, context) {
   }
 
   function uploadMergedPdfToS3(buffer, files, callback) {
-
     var key = 'merged/' + uuid.v4() + '.pdf';
     var params = { Bucket: 'superglue', Key: key, Body: buffer};
 
