@@ -6,16 +6,13 @@ process.env['PATH'] = process.env['PATH'] + ':' + process.env['LAMBDA_TASK_ROOT'
 process.env['LD_LIBRARY_PATH'] = process.env['LAMBDA_TASK_ROOT'] + '/bin';
 
 var async = require('async');
-var AWS = require('aws-sdk');
 
-AWS.config.setPromisesDependency(null);
+var downloadPdfs = require('./lib/download_pdfs');
+var mergePdfs = require('./lib/merge_pdfs');
+var uploadPdf = require('./lib/upload_pdf');
 
 exports.handler = function(event, context) {
   console.time('lambda runtime');
-
-  var downloadPdfs = require('./lib/download_pdfs');
-  var mergePdfs = require('./lib/merge_pdfs');
-  var uploadPdf = require('./lib/upload_pdf');
 
   async.waterfall([
     function getPdfUrls(callback) {
