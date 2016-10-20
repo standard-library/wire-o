@@ -7,9 +7,9 @@ process.env['LD_LIBRARY_PATH'] = process.env['LAMBDA_TASK_ROOT'] + '/bin';
 
 var async = require('async');
 
-var downloadPdfs = require('./lib/download_pdfs');
-var mergePdfs = require('./lib/merge_pdfs');
-var uploadPdf = require('./lib/upload_pdf');
+var downloadPdfs = require('./lib/downloadPdfs');
+var mergePdfs = require('./lib/mergePdfs');
+var uploadPdf = require('./lib/uploadPdf');
 
 exports.handler = function(event, context) {
   console.time('lambda runtime');
