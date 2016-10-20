@@ -6,6 +6,7 @@ process.env['PATH'] = process.env['PATH'] + ':' + process.env['LAMBDA_TASK_ROOT'
 process.env['LD_LIBRARY_PATH'] = process.env['LAMBDA_TASK_ROOT'] + '/bin';
 
 var async = require('async');
+var Promise = require('bluebird');
 
 var downloadPdfs = require('./lib/downloadPdfs');
 var mergePdfs = require('./lib/mergePdfs');
