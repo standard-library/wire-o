@@ -13,21 +13,23 @@ var mergePdfs = require('./lib/mergePdfs');
 var uploadPdf = require('./lib/uploadPdf');
 
 exports.handler = function(event, context) {
-  console.time('lambda runtime');
+  console.time('Lambda runtime');
 
-  async.waterfall([
-    function getPdfUrls(callback) {
-      callback(null, event.pdfUrls);
-    },
-    downloadPdfs,
-    mergePdfs,
-    uploadPdf
-  ], function (error, result) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log('waterfall success?');
-      context.succeed(result);
-    }
-  });
+  downloadPdfs(event.pdfUrls)
+    .then(function (filePaths) {
+      async.waterfall([
+        function getFilePaths(callback) {
+          callback(null, filePaths);
+        },
+        mergePdfs,
+        uploadPdf
+      ], function (error, result) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.timeEnd('Lambda runtime');
+          context.succeed(result);
+        }
+      });
+    });
 }
