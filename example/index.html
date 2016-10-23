@@ -80,13 +80,13 @@
           contentType: "application/json",
           data: JSON.stringify(json),
           success: function(data) {
-            $("div.download-area > img").remove();
-            var link = "<a href='" + data + "' class='download-link' target='_new'>" + "DOWNLOAD</a>";
-             $(".download-area").append(link);
+            var link = "<a href='" + data["mergedPDF"] + "' class='download-link' target='_new'>" + "DOWNLOAD</a>";
 
-             $(".download-link").click(function(){
-               location.reload();
-              });
+            $("div.download-area > img").remove();
+            $(".download-area").append(link);
+            $(".download-link").click(function(){
+              location.reload();
+            });
           },
           error: function(response) {
             $("div.download-area > img").remove();

@@ -7,6 +7,7 @@ var downloadPdfs = require('./lib/downloadPdfs');
 var mergePdfs = require('./lib/mergePdfs');
 var uploadToS3 = require('./lib/uploadToS3')({ bucket: 'superglue' });
 var uploadPdf = require('./lib/uploadPdf')({ uploader: uploadToS3 });
+var formatResponse = require('./lib/formatResponse');
 
 exports.handler = function(event, context, callback) {
   console.time('Lambda runtime');
@@ -14,10 +15,12 @@ exports.handler = function(event, context, callback) {
   downloadPdfs(event.pdfUrls)
     .then(mergePdfs)
     .then(uploadPdf)
-    .then(function (url) {
-      callback(url);
+    .then(formatResponse)
+    .then(callback)
+    .then(function () {
       console.timeEnd('Lambda runtime');
-    }).catch(function (error) {
+    })
+    .catch(function (error) {
       console.log(error);
     });
 }
