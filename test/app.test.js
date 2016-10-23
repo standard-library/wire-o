@@ -18,12 +18,11 @@ describe('app', function () {
           })
         }
       };
+      var params = { pdfUrls: ["https://s3.amazonaws.com/superglue/PCAH_PDF_TEMPLATE.pdf"] };
 
       AWS.S3.prototype.putObject = sinon.stub().returns(s3promise);
 
-      app.handler({ pdfUrls: ["https://s3.amazonaws.com/superglue/PCAH_PDF_TEMPLATE.pdf"] }, ctx);
-
-      ctx.Promise.then(function (url) {
+      app.handler(params, ctx, function (url) {
         expect(url).to.match(/https:\/\/s3\.amazonaws\.com\/superglue\/merged\/.+\-.+\-.+\-.+\-.+\.pdf/);
         done();
       });
