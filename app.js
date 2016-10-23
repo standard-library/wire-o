@@ -5,7 +5,7 @@ process.env['LD_LIBRARY_PATH'] = process.env['LAMBDA_TASK_ROOT'] + '/bin';
 
 var downloadPdfs = require('./lib/downloadPdfs');
 var mergePdfs = require('./lib/mergePdfs');
-var uploadPdf = require('./lib/uploadPdf');
+var uploadPdf = require('./lib/uploadPdf')({ bucket: 'superglue' });
 
 exports.handler = function(event, context) {
   console.time('Lambda runtime');
