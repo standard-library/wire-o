@@ -22,7 +22,7 @@ The JSON response body provides a link (for instance,
 `https://s3.amazonaws.com/superglue/merged/1ed989e5-026d-41f6-917f-953b4fd35bd8.pdf`)to the merged PDF uploaded to S3, which is set to be deleted from S3 after one day. For non-spike purposes, this would change so that the response would look something like...
 ```
 {
-  "mergedPDF": "https://s3.amazonaws.com/superglue/merged/1ed989e5-026d-41f6-917f-953b4fd35bd8.pdf"
+  "mergedPdf": "https://s3.amazonaws.com/superglue/merged/1ed989e5-026d-41f6-917f-953b4fd35bd8.pdf"
 }
 ```
 ## Performance Testing & Benchmarking

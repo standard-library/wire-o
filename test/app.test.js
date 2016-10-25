@@ -24,7 +24,7 @@ describe('app', function () {
       AWS.S3.prototype.putObject = sinon.stub().returns(s3promise);
 
       ctx.Promise.then(function (response) {
-        expect(response["mergedPDF"]).to.match(expectedUrl);
+        expect(response["mergedPdf"]).to.match(expectedUrl);
         done();
       });
 
