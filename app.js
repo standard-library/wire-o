@@ -9,18 +9,19 @@ var uploadToS3 = require('./lib/uploadToS3')({ bucket: 'superglue' });
 var storePDF = require('./lib/storePdf')({ storage: uploadToS3 });
 var formatResponse = require('./lib/formatResponse');
 
-exports.handler = function(event, context, callback) {
+exports.handler = function(event, context) {
   console.time('Lambda runtime');
 
   downloadPdfs(event.pdfUrls)
     .then(mergePdfs)
     .then(storePDF)
     .then(formatResponse)
-    .then(callback)
-    .then(function () {
+    .then(function (response) {
+      context.succeed(response);
+      console.log('Response:', response);
       console.timeEnd('Lambda runtime');
     })
     .catch(function (error) {
-      console.log(error);
+      console.log('Something went wrong:', error);
     });
 }

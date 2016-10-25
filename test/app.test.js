@@ -23,10 +23,12 @@ describe('app', function () {
 
       AWS.S3.prototype.putObject = sinon.stub().returns(s3promise);
 
-      app.handler(params, ctx, function (response) {
+      ctx.Promise.then(function (response) {
         expect(response["mergedPDF"]).to.match(expectedUrl);
         done();
       });
+
+      app.handler(params, ctx);
     });
   });
 });
