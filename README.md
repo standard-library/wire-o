@@ -1,12 +1,10 @@
-# Superglue: AWS Lambda Spike
-
-🏐 *front-end spike URL* 🏐: https://s3.amazonaws.com/superglue/index.html
+# Superglue
 
 ## Endpoint
 
 **POST request to `https://o64722rmyh.execute-api.us-east-1.amazonaws.com/beta?pdfUrls=pdf1,pdf2,pdf3`**
 
-For the AWS Lambda Spike, an API Endpoint was created using API Gateway. With this endpoint (which, for non-spike purposes, would most likely be renamed to something like `https://o64722rmyh.execute-api.us-east-1.amazonaws.com/superglue/pdfs`), the JSON request body looks something like this:
+An API Endpoint was created using AWS API Gateway. With this endpoint, the JSON request body accepts an array of `pdfUrls`:
 
 ```
 {
@@ -18,8 +16,7 @@ For the AWS Lambda Spike, an API Endpoint was created using API Gateway. With th
 }
 ```
 
-The JSON response body provides a link (for instance, 	
-`https://s3.amazonaws.com/superglue/merged/1ed989e5-026d-41f6-917f-953b4fd35bd8.pdf`)to the merged PDF uploaded to S3, which is set to be deleted from S3 after one day. For non-spike purposes, this would change so that the response would look something like...
+The JSON response body provides a link to the merged PDF hosted on S3, which is set to be deleted from S3 after one day.
 
 ```
 {
