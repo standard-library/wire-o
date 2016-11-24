@@ -7,3 +7,4 @@ second_pdf.tar.gz
 deploy.env
 /perf/lambda.log
 npm-debug.log
+dist
