@@ -5,7 +5,7 @@ const lambdaContext = require('aws-lambda-mock-context');
 const AWS = require('aws-sdk');
 const sinon = require('sinon');
 
-const app = require('../app');
+const app = require('../lib/app');
 
 describe('app', function () {
   context('with valid pdf URLS', function () {
