@@ -27,7 +27,7 @@ The JSON response body provides a link (for instance,
 ```
 ## Performance Testing & Benchmarking
 
-Run './test_lambda.sh', which sends more and more of the `https://s3.amazonaws.com/superglue/hello.pdf` PDF to be merged. It first starts
+Run './bin/test_lambda', which sends more and more of the `https://s3.amazonaws.com/superglue/hello.pdf` PDF to be merged. It first starts
 off with merging 1 PDF to sending 100 PDFs to merge. After you start this script, you can then look in AWS CloudWatch to see the metrics of each run.
 
 ### Results from initial performance run on 10/3/2016
@@ -236,8 +236,8 @@ After the AWS CLI is installed...
 3. Put in the Access & Secrety Access keys
 
 #### Zip and upload!
-Run `./zip_and_send_lambda.sh` (zips Lambda files and updates function)
+Run `./bin/zip_and_send_lambda` (zips Lambda files and updates function)
 
 #### Send pdf as byte64 string to API Gateway for Lambda manual testing
 (not currently using this, but maybe use it again in the future)
-run `./send_pdf.sh`
+run `./bin/send_pdf`
