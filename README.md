@@ -8,11 +8,10 @@ An API Endpoint was created using AWS API Gateway. With this endpoint, the JSON 
 
 ```
 {
-  "pdfUrls":
-    [
-      "https://s3.amazonaws.com/superglue/PCAH_PDF_TEMPLATE.pdf",
-      "https://s3.amazonaws.com/superglue/hello.pdf"
-    ]
+  "pdfUrls": [
+    "https://s3.amazonaws.com/superglue/PCAH_PDF_TEMPLATE.pdf",
+    "https://s3.amazonaws.com/superglue/hello.pdf"
+  ]
 }
 ```
 
