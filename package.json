@@ -6,7 +6,6 @@
     "test": "mocha"
   },
   "dependencies": {
-    "async": "^2.0.1",
     "aws-sdk": "^2.6.9",
     "bluebird": "^3.4.6",
     "mkdirp": "^0.5.1",
