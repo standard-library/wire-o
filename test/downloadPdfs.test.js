@@ -1,7 +1,7 @@
 'use strict';
 
-const expect = require('chai').expect;
-const downloadPdfs = require('../lib/downloadPdfs');
+import { expect } from 'chai';
+import downloadPdfs from '../lib/downloadPdfs';
 
 describe('downloadPDfs module', function () {
   it('returns an array of path names', function (done) {

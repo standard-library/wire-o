@@ -1,11 +1,11 @@
 'use strict';
 
-const expect = require('chai').expect;
-const lambdaContext = require('aws-lambda-mock-context');
-const AWS = require('aws-sdk');
-const sinon = require('sinon');
+import { expect } from 'chai';
+import lambdaContext from 'aws-lambda-mock-context';
+import AWS from 'aws-sdk';
+import sinon from 'sinon';
 
-const app = require('../lib/app');
+import app from '../lib/app';
 
 describe('app', function () {
   context('with valid pdf URLS', function () {
