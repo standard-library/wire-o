@@ -10,7 +10,7 @@ import app from '../lib/app';
 describe('app', function () {
   context('with valid pdf URLS', function () {
     it('should merge a set of PDFs', function (done) {
-      const expectedUrl = /https:\/\/s3\.amazonaws\.com\/superglue\/merged\/.+\-.+\-.+\-.+\-.+\.pdf/;
+      const expectedUrl = "https://s3.amazonaws.com/superglue/foo.pdf";
       const ctx = lambdaContext();
       const s3promise = {
         promise: function () {
@@ -24,7 +24,7 @@ describe('app', function () {
       AWS.S3.prototype.putObject = sinon.stub().returns(s3promise);
 
       ctx.Promise.then(function (response) {
-        expect(response["mergedPdf"]).to.match(expectedUrl);
+        expect(response["mergedPdf"]).to.equal(expectedUrl);
         done();
       });
 
