@@ -19,7 +19,7 @@ service: wire-o # NOTE: update this with your service name
 
 provider:
   name: aws
-  runtime: nodejs4.3
+  runtime: nodejs6.10
   profile: default
   iamRoleStatements:
     - Effect: Allow
@@ -93,16 +93,6 @@ functions:
     environment:
       s3BucketName: ${self:custom.s3BucketName}
       s3KeyName: ${self:custom.s3KeyName}
-
-# functions:
-#   index:
-#     handler: app.handler
-#     events:
-#       - http: POST merge
-#         integration: lambda
-#         request:
-#           template:
-#             application/json: '{ "pdfUrls" : "$input.params(''pdfUrls'')" }'
 
         # integration: LAMBDA
 #    The following are a few example events you can configure
