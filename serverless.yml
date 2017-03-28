@@ -16,7 +16,7 @@ service: wire-o # NOTE: update this with your service name
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
 # frameworkVersion: "=X.X.X"
-
+custom: ${file(./wire-o.yml)}
 provider:
   name: aws
   runtime: nodejs6.10
@@ -34,7 +34,6 @@ provider:
       Action:
         - s3:*
       Resource: "*"
-custom: ${file(./wire-o.yml)}
 # you can overwrite defaults here
 #  stage: dev
 #  region: us-east-1
@@ -66,18 +65,6 @@ custom: ${file(./wire-o.yml)}
 #  exclude:
 #    - exclude-me.js
 #    - exclude-me-dir/**
-
-# functions:
-#   merge:
-#     handler: app.handler
-#     events:
-#         -http:
-#           path: merge
-#           method: post
-
-# functions:
-#   hello:
-#     handler: handler.hello
 
 functions:
   index:
