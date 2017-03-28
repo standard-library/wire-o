@@ -30,6 +30,10 @@ provider:
       Action:
         - apigateway:POST
       Resource: arn:aws:apigateway:us-east-1:*:*
+    - Effect: Allow
+      Action:
+        - s3:*
+      Resource: "*"
 custom: ${file(./wire-o.yml)}
 # you can overwrite defaults here
 #  stage: dev
@@ -78,12 +82,17 @@ custom: ${file(./wire-o.yml)}
 functions:
   index:
     handler: dist/app.handler
-    # handler: handler.merge
     events:
       - http:
           path: merge
           method: POST
           integration: lambda
+          request:
+            template:
+              application/json: '{ "pdfUrls" : "$input.params(''pdfUrls'')" }'
+    environment:
+      s3BucketName: ${self:custom.s3BucketName}
+      s3KeyName: ${self:custom.s3KeyName}
 
 # functions:
 #   index:
