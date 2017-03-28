@@ -8,3 +8,5 @@ deploy.env
 /perf/lambda.log
 npm-debug.log
 dist
+wire-o.yml
+.serverless

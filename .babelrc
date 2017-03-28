@@ -1,7 +1,8 @@
 {
   "plugins": [
     "babel-polyfill",
-    "transform-flow-strip-types"
+    "transform-flow-strip-types",
+    "transform-runtime"
   ],
   "presets": [
     "es2015",
