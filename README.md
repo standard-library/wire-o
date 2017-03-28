@@ -2,7 +2,7 @@
 
 ## Endpoint
 
-**POST request to `https://o64722rmyh.execute-api.us-east-1.amazonaws.com/beta?pdfUrls=pdf1,pdf2,pdf3`**
+**POST request to `https://o64722rmyh.execute-api.us-east-1.amazonaws.com/beta?pdfUrls=[pdf1,pdf2,pdf3]`**
 
 An API Endpoint was created using AWS API Gateway. With this endpoint, the JSON request body accepts an array of `pdfUrls`:
 
@@ -23,15 +23,9 @@ The JSON response body provides a link to the merged PDF hosted on S3, which is 
 }
 ```
 
-## Performance Testing & Benchmarking
+## Deployment
 
-Run './bin/test_lambda', which sends more and more of the `https://s3.amazonaws.com/superglue/hello.pdf` PDF to be merged. It first starts off with merging 1 PDF to sending 100 PDFs to merge. After you start this script, you can then look in AWS CloudWatch to see the metrics of each run.
-
-## Want to update the Lambda?
-
-### Upload Lambda to AWS Using the AWS CLI
-
-#### First things first: Get the tools you need
+### First things first: Get the tools you need
 
 You can use the AWS Console, but the AWS CLI allows for the scripting of Lambda uploads. Here's how to get it:
 
@@ -40,16 +34,30 @@ You can use the AWS Console, but the AWS CLI allows for the scripting of Lambda 
 
 After the AWS CLI is installed...
 
-1. Get the Access Key & Secret Access Key from me :-)
-2. `aws configure` in bash
-3. Put in the Access & Secrety Access keys
+1. Find your Access Key & Secret Access Keys, and [make sure you have the permissions you need](http://docs.aws.amazon.com/IAM/latest/UserGuide/access.html) to access AWS.
+2. Run `aws configure`.
+3. Put in the Access & Secret Access keys.
 
-#### Zip and upload!
+Then, install the [Serverless](https://serverless.com/) framework.
 
-Run `./bin/zip_and_send_lambda` (zips Lambda files and updates function)
+### Create `wire-o.yml` and set variables
 
-#### Send pdf as byte64 string to API Gateway for Lambda manual testing
+Two variables are set in `serverless.yml`: `s3BucketName` and `s3KeyName`. Both variables come out of the `wire-o.yml` file.
 
-(not currently using this, but maybe use it again in the future)
+1. Create a `wire-o.yml` file at root.
+2. Define `s3BucketName` and `s3KeyName` variables in the `wire-o.yml` file:
 
-Run `./bin/send_pdf`
+```
+s3BucketName: "s3-bucket-name-goes-here"
+s3KeyName: "s3-key-name-goes-here"
+```
+
+### Compile JavaScript
+
+Compiled code will go into the `dist` folder.
+
+1. Run `babel lib --out-dir dist`.
+
+### Deploy!
+
+1. Run `serverless deploy`.

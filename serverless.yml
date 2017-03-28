@@ -93,8 +93,6 @@ functions:
     environment:
       s3BucketName: ${self:custom.s3BucketName}
       s3KeyName: ${self:custom.s3KeyName}
-
-        # integration: LAMBDA
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
