@@ -1,29 +1,6 @@
-# Superglue
+# Wire-O
 
-## Endpoint
-
-**POST request to `https://o64722rmyh.execute-api.us-east-1.amazonaws.com/beta?pdfUrls=[pdf1,pdf2,pdf3]`**
-
-An API Endpoint was created using AWS API Gateway. With this endpoint, the JSON request body accepts an array of `pdfUrls`:
-
-```
-{
-  "pdfUrls": [
-    "https://s3.amazonaws.com/superglue/PCAH_PDF_TEMPLATE.pdf",
-    "https://s3.amazonaws.com/superglue/hello.pdf"
-  ]
-}
-```
-
-The JSON response body provides a link to the merged PDF hosted on S3, which is set to be deleted from S3 after one day.
-
-```
-{
-  "mergedPdf": "https://s3.amazonaws.com/superglue/merged/1ed989e5-026d-41f6-917f-953b4fd35bd8.pdf"
-}
-```
-
-## Deployment
+## Setup and Deployment
 
 ### First things first: Get the tools you need
 
@@ -37,15 +14,12 @@ After the AWS CLI is installed...
 1. Find your Access Key & Secret Access Keys, and [make sure you have the permissions you need](http://docs.aws.amazon.com/IAM/latest/UserGuide/access.html) to access AWS.
 2. Run `aws configure`.
 3. Put in the Access & Secret Access keys.
-
-Then, install the [Serverless](https://serverless.com/) framework.
+4. Install the [Serverless](https://serverless.com/) framework.
 
 ### Create `wire-o.yml` and set variables
 
-Two variables are set in `serverless.yml`: `s3BucketName` and `s3KeyName`. Both variables come out of the `wire-o.yml` file.
-
 1. Create a `wire-o.yml` file at root.
-2. Define `s3BucketName` and `s3KeyName` variables in the `wire-o.yml` file:
+2. Define `s3BucketName` and `s3KeyName` variables in the `wire-o.yml` file. These two variables are set in the `serverless.yml` file and used in the JavaScript code.
 
 ```
 s3BucketName: "s3-bucket-name-goes-here"
@@ -58,6 +32,26 @@ Compiled code will go into the `dist` folder.
 
 1. Run `babel lib --out-dir dist`.
 
-### Deploy!
+### Deploy
 
 1. Run `serverless deploy`.
+
+## The Endpoint
+
+After you run `serverless deploy`, you will h ave created an API Gateway endpoint that accepts POST requests and triggers a Lambda Function to run. You will see the URL in your console output, which will look something like this:
+
+`https://o64722rmyh.execute-api.us-east-1.amazonaws.com/dev/merge`
+
+An API Endpoint is set up with AWS API Gateway. With this endpoint, the JSON request body accepts an array of `pdfUrls` as a query string:
+
+```
+https://o64722rmyh.execute-api.us-east-1.amazonaws.com/dev/merge?pdfUrls=["https://s3.amazonaws.com/superglue/hello.pdf"]
+```
+
+The JSON response body provides a link to the merged PDF hosted on S3:
+
+```
+{
+  "mergedPdf": "https://s3.amazonaws.com/superglue/merged/1ed989e5-026d-41f6-917f-953b4fd35bd8.pdf"
+}
+```
