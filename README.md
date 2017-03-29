@@ -42,10 +42,15 @@ After you run `serverless deploy`, you will h ave created an API Gateway endpoin
 
 `https://o64722rmyh.execute-api.us-east-1.amazonaws.com/dev/merge`
 
-An API Endpoint is set up with AWS API Gateway. With this endpoint, the JSON request body accepts an array of `pdfUrls` as a query string:
+With this endpoint, the JSON request body accepts an array of `pdfUrls` as a query string:
 
 ```
-https://o64722rmyh.execute-api.us-east-1.amazonaws.com/dev/merge?pdfUrls=["https://s3.amazonaws.com/superglue/hello.pdf"]
+{
+  "pdfUrls": [
+    "https://s3.amazonaws.com/superglue/PCAH_PDF_TEMPLATE.pdf",
+    "https://s3.amazonaws.com/superglue/hello.pdf"
+  ]
+}
 ```
 
 The JSON response body provides a link to the merged PDF hosted on S3:
@@ -55,3 +60,6 @@ The JSON response body provides a link to the merged PDF hosted on S3:
   "mergedPdf": "https://s3.amazonaws.com/superglue/merged/1ed989e5-026d-41f6-917f-953b4fd35bd8.pdf"
 }
 ```
+
+## Monitoring
+You can view how the Lambda function is performing by going into the AWS Console and viewing logs in Cloudwatch.

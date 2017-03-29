@@ -74,9 +74,6 @@ functions:
           path: merge
           method: POST
           integration: lambda
-          request:
-            template:
-              application/json: '{ "pdfUrls" : "$input.params(''pdfUrls'')" }'
     environment:
       s3BucketName: ${self:custom.s3BucketName}
       s3KeyName: ${self:custom.s3KeyName}
