@@ -16,14 +16,13 @@ After the AWS CLI is installed...
 3. Put in the Access & Secret Access keys.
 4. Install the [Serverless](https://serverless.com/) framework.
 
-### Create `wire-o.yml` and set variables
+### Create `wire-o.yml` and set bucket name variable
 
 1. Create a `wire-o.yml` file at root.
-2. Define `s3BucketName` and `s3KeyName` variables in the `wire-o.yml` file. These two variables are set in the `serverless.yml` file and used in the JavaScript code.
+2. Define `s3BucketName` variable in the `wire-o.yml` file. This is set in the `serverless.yml` file and used in the JavaScript code.
 
 ```
 s3BucketName: "s3-bucket-name-goes-here"
-s3KeyName: "s3-key-name-goes-here"
 ```
 
 ### Compile JavaScript
