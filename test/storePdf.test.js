@@ -1,6 +1,8 @@
 'use strict';
 
 import { expect } from 'chai';
+import fs from 'fs';
+import sinon from 'sinon';
 
 import storePdf from '../lib/storePdf';
 import uploadToS3 from '../lib/uploadToS3';
