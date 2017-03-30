@@ -13,4 +13,16 @@ describe('storePdf module', function () {
     expect(storePdf({ storage })).be.an.instanceOf(Function);
     done();
   });
-});
+
+  it('calls the returned function and returns the PDF URL', function (done) {
+    const storageSpy = sinon.spy(uploadToS3);
+    const storage = uploadToS3({ bucket: 'foo-bar'});
+    const store = storePdf({ storage });
+    const buffer = fs.readFileSync(`${__dirname}/fixtures/hello.pdf`);
+    store({ buffer }).then(function (response) {
+      expect(storageSpy.called).to.equal(true);
+      expect(response).to.equal('https://s3.amazonaws.com/superglue/foo.pdf');
+      done();
+    });
+  });
+}); 
