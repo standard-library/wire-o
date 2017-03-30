@@ -13,7 +13,7 @@ describe('uploadToS3 module', function () {
   });
 
   it ('returns location of PDF', function (done) {
-    const upload = {
+    const uploadPromise = {
       promise: function () {
         return new Promise(function (resolve, _) {
           return resolve({ Location: 'https://s3.amazonaws.com/superglue/hello.pdf' });
@@ -21,10 +21,10 @@ describe('uploadToS3 module', function () {
        }
     };
 
-    AWS.S3.prototype.upload = sinon.stub().returns(upload);
-    const locationFunction = uploadToS3({ bucket: 'foo-bar'});
+    AWS.S3.prototype.upload = sinon.stub().returns(uploadPromise);
+    const upload = uploadToS3({ bucket: 'foo-bar'});
 
-    locationFunction('foo.pdf', 'wire-o').then(function (response) {
+    upload('foo.pdf', 'wire-o').then(function (response) {
       expect(response).to.equal('https://s3.amazonaws.com/superglue/hello.pdf');
       done();
     });
