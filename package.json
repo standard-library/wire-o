@@ -31,6 +31,7 @@
     "eslint-plugin-flowtype": "^2.25.0",
     "flow-bin": "^0.36.0",
     "mocha": "^3.1.0",
-    "sinon": "^1.17.6"
+    "sinon": "^1.17.6",
+    "sinon-chai": "^2.9.0"
   }
 }
