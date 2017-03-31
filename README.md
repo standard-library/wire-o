@@ -41,7 +41,7 @@ After you run `serverless deploy`, you will h ave created an API Gateway endpoin
 
 `https://o64722rmyh.execute-api.us-east-1.amazonaws.com/dev/merge`
 
-With this endpoint, the JSON request body accepts an array of `pdfUrls` as a query string:
+With this endpoint, the JSON request body accepts an array of `pdfUrls`:
 
 ```
 {
