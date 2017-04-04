@@ -1,5 +1,9 @@
 # Wire-O
 
+Wire-O is a serverless JavaScript (ES2015) app that lets you quickly set up an API on AWS to merge PDFs and send back links of merged PDFs.
+
+Uses [Serverless framework](https://serverless.com/), [AWS Lambda (Node 6.10)](https://aws.amazon.com/lambda/), [AWS API Gateway](https://aws.amazon.com/api-gateway/), [AWS S3](https://aws.amazon.com/s3/), and [PDFMerge](https://github.com/wubzz/pdf-merge).
+
 ## Setup and Deployment
 
 ### First things first: Get the tools you need
