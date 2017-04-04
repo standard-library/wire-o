@@ -25,14 +25,16 @@ After the AWS CLI is installed...
 s3BucketName: "s3-bucket-name-goes-here"
 ```
 
-### Compile JavaScript & Deploy
+### Deployment
 
-Run `npm run deploy`.
+This command will compile JavaScript with Babel, and deploy the app using Serverless:
+
+`npm run deploy`
 
 
 ## The Endpoint
 
-After you run `serverless deploy`, you will h ave created an API Gateway endpoint that accepts POST requests and triggers a Lambda Function to run. You will see the URL in your console output, which will look something like this:
+After you run `serverless deploy`, you will have created an API Gateway endpoint that accepts POST requests and triggers a Lambda Function to run. You will see the URL in your console output, which will look something like this:
 
 `https://o64722rmyh.execute-api.us-east-1.amazonaws.com/dev/merge`
 
