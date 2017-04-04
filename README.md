@@ -25,15 +25,10 @@ After the AWS CLI is installed...
 s3BucketName: "s3-bucket-name-goes-here"
 ```
 
-### Compile JavaScript
+### Compile JavaScript & Deploy
 
-Compiled code will go into the `dist` folder.
+Run `npm run deploy`.
 
-1. Run `babel lib --out-dir dist`.
-
-### Deploy
-
-1. Run `serverless deploy`.
 
 ## The Endpoint
 
