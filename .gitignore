@@ -1,11 +1,6 @@
 /node_modules/
 .DS_Store
 app.zip
-first_pdf.tar.gz
-second_pdf.tar.gz
-.env
-deploy.env
-/perf/lambda.log
 npm-debug.log
 dist
 wire-o.yml
