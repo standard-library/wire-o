@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "build": "babel lib --out-dir dist",
-    "test": "mocha --compilers js:babel-register"
+    "test": "mocha --compilers js:babel-register",
+    "deploy": "babel lib --out-dir dist && serverless deploy"
   },
   "dependencies": {
     "aws-sdk": "^2.6.9",
