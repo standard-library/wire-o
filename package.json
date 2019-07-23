@@ -27,7 +27,7 @@
     "aws-lambda-mock-context": "^3.0.0",
     "babel-eslint": "^10.0.2",
     "chai": "^3.5.0",
-    "eslint": "^3.19.0",
+    "eslint": "^4.18.2",
     "eslint-plugin-flowtype": "^2.25.0",
     "flow-bin": "^0.36.0",
     "mocha": "^3.1.0",
